@@ -1,0 +1,61 @@
+name: virtual_zen
+description: "A new Flutter project."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  firebase_core: ^3.12.1
+  firebase_auth: ^5.5.1
+  flutter_screenutil: ^5.9.3
+  another_flushbar: ^1.12.30
+  provider: ^6.1.2
+  email_validator: ^3.0.0
+  flutter_svg: ^2.0.17
+  google_sign_in: ^6.2.2
+  fluttertoast: ^8.2.12
+  shared_preferences: ^2.5.2
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+#  flutter_launcher_icons: "^0.14.3"
+#  flutter_native_splash: ^2.4.5
+#
+#flutter_launcher_icons:
+#  android: "launcher_icon"
+#  ios: true
+#  image_path: "assets/logo/owl_logo.jpg"
+#  adaptive_icon_foreground: "assets/logo/logo_foreground.png"
+#  adaptive_icon_background: "#ffffff"
+
+
+#flutter_native_splash:
+#  color: "#D6D6D6"  # Background color of splash screen
+#  image: "assets/logo/owl_logo.jpg"  # Path to your splash image (preferably 512x512 or higher)
+#  android: true
+#  ios: true
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/logo/
+
+  fonts:
+    - family: Esteban
+      fonts:
+        - asset: assets/fonts/Esteban-Regular.ttf
+

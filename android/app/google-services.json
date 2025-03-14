@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "705365726490",
+    "project_id": "virtualzenapp",
+    "storage_bucket": "virtualzenapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705365726490:android:c3df069d6bfffdcdfbc8a3",
+        "android_client_info": {
+          "package_name": "com.example.virtual_zen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "705365726490-gh1o78pojkgf7g4bdc185ihhbqcrckfc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ6GrQjvtuJYeQodKWZ1Ia7IXYiwZvnxs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "705365726490-gh1o78pojkgf7g4bdc185ihhbqcrckfc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "705365726490-b7k2c2l6pokbi53e8nuoitepdkqb8ouu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.virtualZen"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
