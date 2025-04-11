@@ -42,7 +42,7 @@ class EmailSendScreen extends StatelessWidget {
           FilledButtonDesign(
             title: 'Back to Login',
             press: (){
-              Navigator.pushNamed(context, RouteName.resetPassword);
+              Navigator.pushReplacementNamed(context, RouteName.resetPassword);
             },
           ),
           SizedBox(height: 20.h,),

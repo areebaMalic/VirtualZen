@@ -26,7 +26,7 @@ class ForgetPasswordScreen extends StatelessWidget {
       body:  Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 60.w, horizontal: 16.h),
+            padding: EdgeInsets.symmetric(vertical: 60.h, horizontal: 16.w),
             child: Text('Don’t worry.\nEnter your email and we’ll send you a link to reset your password.' ,
               style: TextStyle(
                   fontSize: 24.sp,
@@ -35,7 +35,7 @@ class ForgetPasswordScreen extends StatelessWidget {
               ),),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding:  EdgeInsets.symmetric(horizontal: 16.w),
             child: TextFieldDesign(
               focusFunction: (focusValue){
                 fieldFocusChange(context, emailFocus, FocusNode());
@@ -52,9 +52,9 @@ class ForgetPasswordScreen extends StatelessWidget {
                 child: SizedBox(
                   height: 40.h,
                   width: 40.w,
-                  child: const CircularProgressIndicator(
+                  child: CircularProgressIndicator(
                     color: kFilledButtonColor,
-                    strokeWidth: 3,
+                    strokeWidth: 3.w,
                   ),
                 ),
               ):
@@ -64,7 +64,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                     if(_emailController.text.isNotEmpty){
                       authViewModel.setEmail(_emailController.text.toString());
                       authViewModel.sendPasswordResetLink(_emailController.text.toString());
-                      Navigator.pushNamed(context, RouteName.emailOnWay);
+                      Navigator.pushReplacementNamed(context, RouteName.emailOnWay);
                     } else{
                       flushBarMessenger('Please enter your email', context);
                     }

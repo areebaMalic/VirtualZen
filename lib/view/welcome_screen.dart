@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:virtual_zen/utils/components/filled_button_design.dart';
-import 'package:virtual_zen/utils/routes/route_name.dart';
+import '../utils/components/filled_button_design.dart';
+import '../utils/routes/route_name.dart';
 
 class WelcomeScreen extends StatelessWidget {
   @override
@@ -24,9 +24,9 @@ class WelcomeScreen extends StatelessWidget {
                 Text(
                   "Welcome to VirtualZen",
                   style: TextStyle(
-                    fontSize: 34.sp,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Esteban'
+                      fontSize: 34.sp,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Esteban'
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -36,7 +36,7 @@ class WelcomeScreen extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 16.sp,
                       color: Colors.black54,
-                    fontFamily: 'Esteban'
+                      fontFamily: 'Esteban'
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -47,13 +47,13 @@ class WelcomeScreen extends StatelessWidget {
           Padding(
             padding:  EdgeInsets.all(20.r),
             child: SizedBox(
-              width: double.infinity,
-              height: 60.h,
-              child: FilledButtonDesign(
-                  title: "Start",
-                  press: (){
-                Navigator.pushReplacementNamed(context, RouteName.signUp);
-              })
+                width: double.infinity,
+                height: 60.h,
+                child: FilledButtonDesign(
+                    title: "Start",
+                    press: (){
+                      Navigator.pushReplacementNamed(context, RouteName.signUp);
+                    })
             ),
           ),
         ],

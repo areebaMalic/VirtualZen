@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:virtual_zen/utils/routes/route_name.dart';
-import 'package:virtual_zen/view/phobia_list_screen.dart';
-import 'package:virtual_zen/view/different_phobia_screen.dart';
-import 'package:virtual_zen/view/verification_screen.dart';
-import 'package:virtual_zen/view/welcome_screen.dart';
-
+import 'package:virtual_zen/view/feed_screen.dart';
+import 'package:virtual_zen/view/player_screen.dart';
+import 'package:virtual_zen/view/profile_screen.dart';
 import '../../view/bottom_bar_navigation.dart';
 import '../../view/email_send_screen.dart';
+import '../../view/flying_hscreen.dart';
 import '../../view/forget_password_screen.dart';
+import '../../view/height_hscreen.dart';
 import '../../view/home_screen.dart';
 import '../../view/login_page.dart';
+import '../../view/phobia_list.dart';
 import '../../view/reset_password_screen.dart';
 import '../../view/sign_up_screen.dart';
+import '../../view/spider_Hscreen.dart';
 import '../../view/splash_screen.dart';
+import '../../view/verification_screen.dart';
+import '../../view/welcome_screen.dart';
 
 
 class Routes{
@@ -23,9 +27,6 @@ class Routes{
       case RouteName.splash:
         return MaterialPageRoute(builder: (_) =>  const SplashScreen());
 
-      case RouteName.setToGo:
-      //   return MaterialPageRoute(builder: (_) =>  const SetTogoScreen());
-
       case RouteName.bottomBar:
         return MaterialPageRoute(builder: (_) =>   BottomBarScreen());
 
@@ -34,15 +35,6 @@ class Routes{
 
       case RouteName.login:
         return MaterialPageRoute(builder: (context) =>  LoginScreen());
-
-      case RouteName.pinSetup:
-      //   return MaterialPageRoute(builder: (context) =>   const PinSetupScreen());
-
-      case RouteName.accountSetup:
-      //   return MaterialPageRoute(builder: (context) =>   const AccountSetupScreen());
-
-      case RouteName.addNewAccount:
-      //   return MaterialPageRoute(builder: (context) =>   AddNewAccountScreen());
 
       case RouteName.signUp:
         return MaterialPageRoute(builder: (context) => SignUpScreen());
@@ -59,12 +51,6 @@ class Routes{
       case RouteName.emailOnWay:
         return MaterialPageRoute(builder: (context) =>  const EmailSendScreen());
 
-      case RouteName.expense:
-      //   return MaterialPageRoute(builder: (context) =>   ExpenseScreen());
-
-      case RouteName.income:
-      //   return MaterialPageRoute(builder: (context) =>   IncomeScreen());
-
       case RouteName.phobiaList:
         return MaterialPageRoute(builder: (context) =>   PhobiaListScreen());
 
@@ -72,13 +58,19 @@ class Routes{
         return MaterialPageRoute(builder: (context) =>   HomeScreen());
 
       case RouteName.height:
-          return MaterialPageRoute(builder: (context) =>   HeightsHomePage());
+        return MaterialPageRoute(builder: (context) =>   HeightsHomePage());
 
       case RouteName.flying:
-          return MaterialPageRoute(builder: (context) =>   FlyingHomePage());
+        return MaterialPageRoute(builder: (context) =>   FlyingHomePage());
 
       case RouteName.spider:
-         return MaterialPageRoute(builder: (context) =>   SpidersHomePage());
+        return MaterialPageRoute(builder: (context) =>   SpidersHomePage());
+
+      case RouteName.profile:
+        return MaterialPageRoute(builder: (context) =>   ProfileScreen());
+
+      case RouteName.feed:
+        return MaterialPageRoute(builder: (context) =>   Feed());
 
 
       default:

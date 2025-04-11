@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import '../utils/components/account_login_signUp.dart';
 import '../utils/components/app_bar_text.dart';
 import '../utils/components/filled_button_design.dart';
 import '../utils/components/term_condition_checkbox.dart';
@@ -11,7 +12,6 @@ import '../utils/constant.dart';
 import '../utils/routes/route_name.dart';
 import '../viewModel/auth_view_model.dart';
 import '../viewModel/page_view_model.dart';
-import 'package:virtual_zen/utils/components/account_login_signUp.dart';
 
 class SignUpScreen extends StatelessWidget {
 
@@ -90,9 +90,9 @@ class SignUpScreen extends StatelessWidget {
                         child: SizedBox(
                           height: 40.h,
                           width: 40.w,
-                          child: const CircularProgressIndicator(
+                          child: CircularProgressIndicator(
                             color: kFilledButtonColor,
-                            strokeWidth: 3,
+                            strokeWidth: 3.w,
                           ),
                         ),
                       ): FilledButtonDesign(
@@ -125,7 +125,7 @@ class SignUpScreen extends StatelessWidget {
 
                               User? user = await authViewModel.signUpWithEmailPassword(email,password);
                               if(user!=null) {
-                                Navigator.pushNamed(context, RouteName.verification);
+                                Navigator.pushReplacementNamed(context, RouteName.verification);
                                 flushBarMessenger(
                                   'A verification email has been sent. Please check your inbox.', context, showError: false,
                                 );
@@ -195,7 +195,7 @@ class SignUpScreen extends StatelessWidget {
                     title: 'Already have an account?',
                     subTitle: 'Login',
                     press: (){
-                      Navigator.pushNamed(context, RouteName.login);
+                      Navigator.pushReplacementNamed(context, RouteName.login);
                     },
                   )
                 ],

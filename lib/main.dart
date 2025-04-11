@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +10,7 @@ import 'package:virtual_zen/utils/routes/routes.dart';
 import 'package:virtual_zen/viewModel/auth_view_model.dart';
 import 'package:virtual_zen/viewModel/page_view_model.dart';
 import 'package:virtual_zen/viewModel/phobia_view_model.dart';
+import 'package:virtual_zen/viewModel/user_provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +38,7 @@ class MyApp extends StatelessWidget {
               ChangeNotifierProvider(create: (_) => PageViewModel()),
               ChangeNotifierProvider(create: (_) => AuthViewModel()),
               ChangeNotifierProvider(create: (_) => PhobiaViewModel()),
+              ChangeNotifierProvider(create: (_) => UserProvider()),
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,

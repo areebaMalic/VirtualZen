@@ -63,56 +63,6 @@ class LoginScreen extends StatelessWidget {
                       );
                     },),
                   SizedBox(height: 40.h,),
-                  /*Consumer<AuthViewModel>(
-                    builder: (context, authViewModel, child) {
-                      return authViewModel.isLoading ?  Center(
-                        child: SizedBox(
-                          height: 40.h,
-                          width: 40.w,
-                          child: const CircularProgressIndicator(
-                            color: kFilledButtonColor,
-                            strokeWidth: 3,
-                          ),
-                        ),
-                      ):   FilledButtonDesign(
-                        title: 'Login',
-                        press: () async{
-                          String email = _emailController.text.trim();
-                          String password = _passwordController.text.trim();
-                          if(email.isEmpty && password.isEmpty){
-                            return flushBarMessenger('Please Enter Required Fields', context );
-                          }
-                          else if(email.isEmpty){
-                            return flushBarMessenger('Please enter email', context  );
-                          }
-                          else if(password.isEmpty){
-                            return flushBarMessenger('Please enter password', context );
-                          }
-                          else{
-                            User? user = await authViewModel.loginUserWithEmailPassword(email, password);
-                            if(user != null){
-                              bool isVerified = await authViewModel.checkEmailVerification(context);
-                              if(!isVerified){
-                                return flushBarMessenger(
-                                    'Please verify your email before logging in', context,showError: true);
-                              }
-
-
-                           //   flushBarMessenger('User Logged In Successfully', context , showError: false );
-                              _emailController.clear();
-                              _passwordController.clear();
-
-                              showToast("User Logged in successfully", kIncomeBackgroundColor);
-                              Navigator.pushNamed(context, RouteName.phobiaList);
-
-                            }else {
-                              flushBarMessenger( authViewModel.errorMessage ?? 'Login Failed. Please check your credentials', context );
-                            }
-                          }
-                        },
-                      );
-                    },
-                  ),*/
                   Consumer<AuthViewModel>(
                     builder: (context, authViewModel, child) {
                       return FilledButtonDesign(
@@ -127,7 +77,13 @@ class LoginScreen extends StatelessWidget {
                             await prefs.setBool('isLoggedIn', true);
                             bool isVerified = await authViewModel.checkEmailVerification(context);
                             if (isVerified) {
-                              Navigator.pushNamed(context, RouteName.phobiaList);
+                              String? phobia = prefs.getString('selectedPhobia');
+                              int? lastSelectedIndex = prefs.getInt('lastSelectedIndex');
+                              if (phobia == null) {
+                                Navigator.pushReplacementNamed(context, RouteName.phobiaList);
+                              } else {
+                                Navigator.pushReplacementNamed(context, RouteName.bottomBar);
+                              }
                             } else {
                               flushBarMessenger('Please verify your email before logging in', context);
                             }
@@ -141,7 +97,7 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(height: 33.h,),
                   TextButton(
                     onPressed: (){
-                      Navigator.pushNamed(context, RouteName.forgetPassword);
+                      Navigator.pushReplacementNamed(context, RouteName.forgetPassword);
                     },
                     child: const Text('Forget Password?',
                         style: TextStyle(
@@ -152,7 +108,7 @@ class LoginScreen extends StatelessWidget {
                     title: "Don't have an account?",
                     subTitle: 'Sign Up',
                     press: (){
-                      Navigator.pushNamed(context, RouteName.signUp);
+                      Navigator.pushReplacementNamed(context, RouteName.signUp);
                     },
                   )
                 ],

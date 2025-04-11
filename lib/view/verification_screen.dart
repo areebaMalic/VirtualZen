@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:virtual_zen/utils/constant.dart';
-
 import '../utils/components/filled_button_design.dart';
+import '../utils/constant.dart';
 import '../utils/routes/route_name.dart';
 import '../viewModel/auth_view_model.dart';
 
@@ -47,7 +46,7 @@ class EmailVerificationScreen extends StatelessWidget {
                 press: () async {
                   bool isVerified = await authViewModel.checkEmailVerification(context);
                   if(isVerified){
-                    Navigator.pushNamed(context, RouteName.login);
+                    Navigator.pushReplacementNamed(context, RouteName.login);
                   }else{
                     flushBarMessenger("Email not verified.Do check your inbox", context, showError: true);
                   }

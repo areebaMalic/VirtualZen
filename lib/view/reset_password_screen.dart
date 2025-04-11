@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -57,9 +55,7 @@ class ResetPasswordScreen extends StatelessWidget {
           Consumer<AuthViewModel>(
             builder: (context, authViewModel, child) {
               if (authViewModel.errorMessage != null) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  flushBarMessenger(authViewModel.errorMessage!, context);
-                });
+                flushBarMessenger(authViewModel.errorMessage!, context);
               }
               return authViewModel.isLoading
                   ? Center(
@@ -80,7 +76,7 @@ class ResetPasswordScreen extends StatelessWidget {
                     _reNewPasswordController.text.trim(),
                   );
                   if (authViewModel.errorMessage == 'Password updated successfully') {
-                    Navigator.pushNamed(context, RouteName.login);
+                    Navigator.pushReplacementNamed(context, RouteName.login);
                   }
                 },
               );
