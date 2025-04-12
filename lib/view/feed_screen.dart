@@ -1,3 +1,4 @@
+// feed_screen.dart
 import 'package:flutter/material.dart';
 import 'package:virtual_zen/view/player_screen.dart';
 
@@ -15,6 +16,7 @@ class Feed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('Stress Relief Videos')),
       body: ListView.builder(
         itemCount: videoIDs.length,
         itemBuilder: (context, index) {
@@ -31,11 +33,13 @@ class Feed extends StatelessWidget {
             },
             child: Card(
               margin: const EdgeInsets.all(8.0),
-              child: Column(
+              child: Stack(
+                alignment: Alignment.center,
                 children: [
                   Image.network(
                     thumbnailUrl,
                     fit: BoxFit.cover,
+                    width: double.infinity,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
                         height: 200,
@@ -46,8 +50,11 @@ class Feed extends StatelessWidget {
                       );
                     },
                   ),
-
-
+                  const Icon(
+                    Icons.play_circle_fill,
+                    size: 64,
+                    color: Colors.white70,
+                  ),
                 ],
               ),
             ),

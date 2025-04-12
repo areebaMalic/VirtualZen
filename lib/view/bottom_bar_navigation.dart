@@ -6,9 +6,9 @@ import 'package:virtual_zen/view/spider_Hscreen.dart';
 import 'package:virtual_zen/view/height_hscreen.dart';
 import 'package:virtual_zen/view/flying_hscreen.dart';
 import '../utils/routes/route_name.dart';
-import '../view/community_screen.dart';
 import '../view/profile_screen.dart';
 import '../viewModel/page_view_model.dart';
+import 'community_screen.dart';
 import 'feed_screen.dart';
 
 class BottomBarScreen extends StatefulWidget {
@@ -101,7 +101,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
         backgroundColor: Colors.white,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Phobia"),
-          BottomNavigationBarItem(icon: Icon(Icons.music_note), label: "Relaxation"),
+          BottomNavigationBarItem(icon: Icon(Icons.music_note), label: "Meditation"),
           BottomNavigationBarItem(icon: Icon(Icons.people), label: "Community"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
         ],
