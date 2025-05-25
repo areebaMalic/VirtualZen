@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../utils/components/phobia_list.dart';
+import '../model/phobia_list.dart';
 
 class PhobiaViewModel extends ChangeNotifier {
   final List<Phobia> _phobias = [

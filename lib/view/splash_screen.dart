@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/routes/route_name.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -18,16 +19,18 @@ class SplashScreen extends StatelessWidget {
             Image.asset(
               'assets/logo/logo_foreground.png',
               width: 150.w,
-              height: 150.h,// Ensure this path is correct
+              height: 150.h,
             ),
             SizedBox(height: 20.h),
-            Text('Conquer Your Fear',
+            Text(
+              'Conquer Your Fear',
               style: TextStyle(
-                  color: Colors.black54,
-                  fontFamily: 'Esteban',
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold
-              ),),
+                color: Colors.black54,
+                fontFamily: 'Esteban',
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             SizedBox(height: 20.h),
             CircularProgressIndicator(),
           ],
@@ -35,35 +38,25 @@ class SplashScreen extends StatelessWidget {
       ),
     );
   }
+
   void _checkLoginStatus(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-    String? selectedPhobia = prefs.getString('selectedPhobia');
+    await Future.delayed(const Duration(seconds: 2));
+    final user = FirebaseAuth.instance.currentUser;
 
-    await Future.delayed(Duration(seconds: 2));
+    if (user != null) {
+      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      final selectedPhobia = doc.data()?['selectedPhobia'];
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!context.mounted) return; // Ensure the context is still valid before navigation
-      if (isLoggedIn && selectedPhobia != null) {
+      if (!context.mounted) return;
+      if (selectedPhobia != null) {
         Navigator.pushReplacementNamed(context, RouteName.bottomBar);
       } else {
         Navigator.pushReplacementNamed(context, RouteName.welcome);
       }
-    });
-  }
-
-/* void _checkLoginStatus(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-    String? selectedPhobia = prefs.getString('selectedPhobia');
-    int? lastSelectedIndex = prefs.getInt('lastSelectedIndex');
-
-    await Future.delayed(const Duration(seconds: 3));
-    if (isLoggedIn && selectedPhobia != null) {
-      Navigator.pushReplacementNamed(context, RouteName.bottomBar);
     } else {
+      if (!context.mounted) return;
       Navigator.pushReplacementNamed(context, RouteName.welcome);
     }
   }
-}*/
+
 }

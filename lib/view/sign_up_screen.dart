@@ -12,6 +12,7 @@ import '../utils/constant.dart';
 import '../utils/routes/route_name.dart';
 import '../viewModel/auth_view_model.dart';
 import '../viewModel/page_view_model.dart';
+import '../viewModel/profile_view_model.dart';
 
 class SignUpScreen extends StatelessWidget {
 
@@ -28,9 +29,15 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final profileVM = Provider.of<ProfileViewModel>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const AppBarText(text: 'Sign Up',),
+        backgroundColor: profileVM.isDarkMode ?  Colors.black : Colors.white,
+        title: AppBarText(
+            text: 'Sign Up',
+            color: profileVM.isDarkMode ?  Colors.white : Colors.black ),
         toolbarHeight: 100.h,
         centerTitle: true,
       ),
@@ -78,7 +85,6 @@ class SignUpScreen extends StatelessWidget {
                       );
                     },),
                   SizedBox(height: 25.h,),
-                  // Code Input and Send Code Button
                   const TermConditionCheckbox(
                     text: 'By signing up, you agree to the',
                     coloredText: ' Terms of Service and Privacy Policy',),
@@ -123,7 +129,7 @@ class SignUpScreen extends StatelessWidget {
                             }
                             else{
 
-                              User? user = await authViewModel.signUpWithEmailPassword(email,password);
+                              User? user = await authViewModel.signUpWithEmailPassword(email,password, name);
                               if(user!=null) {
                                 Navigator.pushReplacementNamed(context, RouteName.verification);
                                 flushBarMessenger(
@@ -158,9 +164,10 @@ class SignUpScreen extends StatelessWidget {
                     builder: (context, authViewModel, child) {
                       return InkWell(
                         onTap: () async {
-                          User ? user = await authViewModel.signUpWithGoogle();
+                          String name = _nameController.text.trim();
+                          User ? user = await authViewModel.signUpWithGoogle(name);
                           if (user != null) {
-                            Navigator.pushNamed(context, RouteName.home);
+                            Navigator.pushNamed(context, RouteName.bottomBar);
                             flushBarMessenger("Login Successfully ${authViewModel.errorMessage}", context , showError: false);
                           } else {
                             flushBarMessenger('Google Sign-In Failed', context);

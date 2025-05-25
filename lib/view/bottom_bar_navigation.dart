@@ -1,111 +1,103 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:virtual_zen/utils/constant.dart';
-import 'package:virtual_zen/view/spider_Hscreen.dart';
-import 'package:virtual_zen/view/height_hscreen.dart';
+import 'package:virtual_zen/view/community_screen.dart';
+import 'package:virtual_zen/view/feed_screen.dart';
 import 'package:virtual_zen/view/flying_hscreen.dart';
-import '../utils/routes/route_name.dart';
-import '../view/profile_screen.dart';
-import '../viewModel/page_view_model.dart';
-import 'community_screen.dart';
-import 'feed_screen.dart';
+import 'package:virtual_zen/view/height_hscreen.dart';
+import 'package:virtual_zen/view/profile_screen.dart';
+import 'package:virtual_zen/view/spider_Hscreen.dart';
+import 'package:virtual_zen/viewModel/page_view_model.dart';
+import 'package:virtual_zen/viewModel/profile_view_model.dart';
+import '../service/notification_services.dart';
+import '../viewModel/friend_requests_view_model.dart';
+import '../viewModel/friends_view_model.dart';
 
 class BottomBarScreen extends StatefulWidget {
+  const BottomBarScreen({super.key});
+
   @override
-  _BottomBarScreenState createState() => _BottomBarScreenState();
+  State<BottomBarScreen> createState() => _BottomBarScreenState();
 }
 
 class _BottomBarScreenState extends State<BottomBarScreen> {
-  String selectedPhobia = "height";
+  bool _initialized = false;
 
   @override
   void initState() {
     super.initState();
-    _loadPreferences();
-  }
+    NotificationServices notificationServices = NotificationServices();
+    notificationServices.requestNotificationPermission();
 
-  Future<void> _loadPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? savedPhobia = prefs.getString('selectedPhobia');
-    int? savedIndex = prefs.getInt('lastSelectedIndex');
+    Future.microtask(() {
+      if (!_initialized) {
+        final profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
+        final pageViewModel = Provider.of<PageViewModel>(context, listen: false);
+        final friendVM = Provider.of<FriendsViewModel>(context, listen: false);
 
-    setState(() {
-      selectedPhobia = savedPhobia ?? "height";
+        profileViewModel.tryLoadProfileWithRetry(); // loads profile
+        Future.delayed(Duration.zero, () {
+          final friendReqVM = Provider.of<FriendRequestViewModel>(context, listen: false);
+          friendReqVM.listenForRequests();
+        });
+        friendVM.initialize();
+         pageViewModel.loadPhobia(); // loads phobia from shared prefs
+        _initialized = true;
+      }
     });
-
-    final pageViewModel = Provider.of<PageViewModel>(context, listen: false);
-    pageViewModel.setCurrentNavigationIndex(savedIndex ?? 0);
-    pageViewModel.pageController.jumpToPage(savedIndex ?? 0);
   }
 
-  Future<void> _logoutUser(BuildContext context) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isLoggedIn', false);
-    await prefs.remove('lastSelectedIndex');
-    Navigator.pushReplacementNamed(context, RouteName.login);
-  }
 
-  Widget getPhobiaScreen() {
-    switch (selectedPhobia) {
+  Widget getPhobiaScreen(String? phobia) {
+    switch (phobia) {
       case "flying":
         return FlyingHomePage();
       case "spider":
         return SpidersHomePage();
-      default:
+      case "height":
         return HeightsHomePage();
+      default:
+        return const Center(child: Text("No phobia selected"));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final navigationProvider = Provider.of<PageViewModel>(context);
+    return Consumer2<ProfileViewModel, PageViewModel>(
+      builder: (context, profileVM, navigationProvider, _) {
+        // Show loading until both are ready
+        if (profileVM.isLoadingProfile || navigationProvider.isLoading) {
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        }
 
-    final List<Widget> pages = [
-      getPhobiaScreen(),                  // Phobia screen (dynamic)
-      Feed(),           // Relaxation screen
-      CommunityScreen(),                 // Community screen
-      ProfileScreen(),                   // Profile screen
-    ];
+        final List<Widget> pages = [
+          getPhobiaScreen(navigationProvider.selectedPhobia),
+          Feed(),
+          CommunityScreen(),
+          ProfileScreen(),
+        ];
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: kFilledButtonColor,
-        title: const Text("VirtualZen", style: TextStyle(color: Colors.white)),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout, color: Colors.white),
-            onPressed: () => _logoutUser(context),
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: PageView(
+            controller: navigationProvider.pageController,
+            onPageChanged: navigationProvider.setCurrentIndex,
+            children: pages,
           ),
-        ],
-      ),
-      body: PageView(
-        controller: navigationProvider.pageController,
-        onPageChanged: (index) async {
-          navigationProvider.onPageChanged(index);
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setInt('lastSelectedIndex', index);
-        },
-        children: pages,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: navigationProvider.currentIndex,
-        onTap: (index) async {
-          navigationProvider.setCurrentIndex(index);
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setInt('lastSelectedIndex', index);
-        },
-        selectedItemColor: kFilledButtonColor,
-        unselectedItemColor: Colors.grey,
-        backgroundColor: Colors.white,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Phobia"),
-          BottomNavigationBarItem(icon: Icon(Icons.music_note), label: "Meditation"),
-          BottomNavigationBarItem(icon: Icon(Icons.people), label: "Community"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
-      ),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: navigationProvider.currentIndex,
+            onTap: navigationProvider.setCurrentIndex,
+            selectedItemColor: kFilledButtonColor,
+            unselectedItemColor: Colors.grey,
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: "Phobia"),
+              BottomNavigationBarItem(icon: Icon(Icons.music_note), label: "Meditation"),
+              BottomNavigationBarItem(icon: Icon(Icons.people), label: "Community"),
+              BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+            ],
+          ),
+        );
+      },
     );
   }
 }

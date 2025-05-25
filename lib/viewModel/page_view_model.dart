@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
 
@@ -9,19 +11,45 @@ class PageViewModel with ChangeNotifier{
   int _currentIndex = 0 ;
   int  get currentIndex => _currentIndex;
 
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
   PageController get pageController => _pageController;
 
+  String? selectedPhobia;
+  bool isLoading = true;
+
+  Future<void> loadPhobia() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      selectedPhobia = doc.data()?['selectedPhobia'] as String?;
+    }
+    isLoading = false;
+    notifyListeners();
+  }
+
+
+  Future<void> updatePhobia(String newPhobia) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+        'selectedPhobia': newPhobia,
+      });
+      selectedPhobia = newPhobia;
+      notifyListeners();
+    }
+  }
+
+  void resetPhobia() {
+    selectedPhobia = null;
+    _currentIndex = 0;
+    _pageController.jumpToPage(0);
+    notifyListeners();
+  }
 
 
   void togglePasswordVisibility(){
     _isPasswordVisible = !_isPasswordVisible;
     notifyListeners();
-  }
-
-  void setCurrentNavigationIndex(int index) {
-    _currentIndex = index;
-    notifyListeners(); // Notify listeners to rebuild the UI when index changes
   }
 
   void setCurrentIndex(int index) {
@@ -37,5 +65,11 @@ class PageViewModel with ChangeNotifier{
   void onPageChanged(int index) {
     _currentIndex = index;
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 }

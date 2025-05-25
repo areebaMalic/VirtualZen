@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../viewModel/auth_view_model.dart';
+import '../../viewModel/profile_view_model.dart';
 import '../constant.dart';
 
 class TermConditionCheckbox extends StatelessWidget {
@@ -18,6 +19,9 @@ class TermConditionCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final profileVM = Provider.of<ProfileViewModel>(context);
+
     return Row(
         children: [
           Consumer<AuthViewModel>(
@@ -38,7 +42,7 @@ class TermConditionCheckbox extends StatelessWidget {
               text: TextSpan(
                 text: text,
                 style: TextStyle(
-                    color: Colors.black,
+                    color: profileVM.isDarkMode ?  Colors.white : Colors.black,
                     fontFamily: 'Esteban',
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w500

@@ -17,9 +17,15 @@ class RouteName {
 
   static const String bottomBar = 'bottom_bar_screen';
 
-  static const String home = 'home_screen';
-
   static const String profile = 'profile_screen';
+
+  static const String community = 'community_screen';
+
+  static const String chat = 'chat_screen';
+
+  static const String forward = 'forward_screen';
+
+  static const String addFriend = 'add_friend_screen';
 
   static const String phobiaList = 'phobia_list_screen';
 

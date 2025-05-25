@@ -7,6 +7,7 @@ import '../utils/components/text_field_design.dart';
 import '../utils/constant.dart';
 import '../utils/routes/route_name.dart';
 import '../viewModel/auth_view_model.dart';
+import '../viewModel/profile_view_model.dart';
 
 class ForgetPasswordScreen extends StatelessWidget {
 
@@ -17,9 +18,16 @@ class ForgetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final profileVM = Provider.of<ProfileViewModel>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const AppBarText(text: 'Forget Password'),
+        backgroundColor: profileVM.isDarkMode ?  Colors.black : Colors.white,
+        title: AppBarText(
+          text: 'Forget Password',
+          color: profileVM.isDarkMode ?  Colors.white : Colors.black ,
+        ),
         toolbarHeight: 100.h,
         centerTitle: true,
       ),

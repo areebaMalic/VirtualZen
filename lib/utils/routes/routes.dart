@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:virtual_zen/utils/routes/route_name.dart';
+import 'package:virtual_zen/view/add_friend_screen.dart';
+import 'package:virtual_zen/view/community_screen.dart';
 import 'package:virtual_zen/view/feed_screen.dart';
-import 'package:virtual_zen/view/player_screen.dart';
 import 'package:virtual_zen/view/profile_screen.dart';
 import '../../view/bottom_bar_navigation.dart';
+import '../../view/chat_screen.dart';
 import '../../view/email_send_screen.dart';
 import '../../view/flying_hscreen.dart';
 import '../../view/forget_password_screen.dart';
 import '../../view/height_hscreen.dart';
-import '../../view/home_screen.dart';
 import '../../view/login_page.dart';
 import '../../view/phobia_list.dart';
 import '../../view/reset_password_screen.dart';
@@ -54,9 +55,6 @@ class Routes{
       case RouteName.phobiaList:
         return MaterialPageRoute(builder: (context) =>   PhobiaListScreen());
 
-      case RouteName.home:
-        return MaterialPageRoute(builder: (context) =>   HomeScreen());
-
       case RouteName.height:
         return MaterialPageRoute(builder: (context) =>   HeightsHomePage());
 
@@ -71,6 +69,15 @@ class Routes{
 
       case RouteName.feed:
         return MaterialPageRoute(builder: (context) =>   Feed());
+
+      case RouteName.community:
+        return MaterialPageRoute(builder: (context) =>   CommunityScreen());
+
+      case RouteName.chat:
+        return MaterialPageRoute(builder: (context) =>   ChatScreen());
+
+      case RouteName.addFriend:
+        return MaterialPageRoute(builder: (context) =>   AddFriendScreen());
 
 
       default:

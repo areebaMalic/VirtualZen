@@ -16,7 +16,9 @@ class Feed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Stress Relief Videos')),
+      appBar: AppBar(title: const Text('Stress Relief Videos',style: TextStyle(
+        color: Colors.white
+      ),)),
       body: ListView.builder(
         itemCount: videoIDs.length,
         itemBuilder: (context, index) {

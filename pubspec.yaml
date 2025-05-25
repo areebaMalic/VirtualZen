@@ -20,13 +20,20 @@ dependencies:
   flutter_svg: ^2.0.17
   google_sign_in: ^6.2.2
   fluttertoast: ^8.2.12
-  shared_preferences: ^2.5.2
   cloud_firestore: ^5.6.5
   firebase_storage: ^12.4.4
   youtube_player_flutter: ^9.1.1
-
-
-
+  intl: ^0.20.2
+  firebase_database: ^11.3.5
+  emoji_picker_flutter: ^4.3.0
+  cloud_functions: ^5.5.0
+  googleapis: ^14.0.0
+  googleapis_auth: ^2.0.0
+  firebase_messaging: ^15.2.5
+  app_settings: ^6.1.1
+  flutter_local_notifications: ^19.1.0
+  image_picker: ^1.1.2
+  dio: ^5.8.0+1
 
 
 
@@ -35,9 +42,17 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo/logo_icon.png"
+
 #  flutter_launcher_icons: "^0.14.3"
 #  flutter_native_splash: ^2.4.5
-#
+
+
 #flutter_launcher_icons:
 #  android: "launcher_icon"
 #  ios: true
@@ -59,6 +74,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/logo/
+    - assets/firebase_service_account.json
 
   fonts:
     - family: Esteban

@@ -1,5 +1,3 @@
-
-
 import 'package:another_flushbar/flushbar.dart';
 import 'package:another_flushbar/flushbar_route.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +10,8 @@ const kLightTextColor = Color(0xFF91919F);
 const kFilledButtonColor = Color(0xff3094E8);
 const kHighlightedTextColor = Color(0xff4F7596);
 const kUnfilledButtonColor = Color(0xffEEE5FF);
-const kExpenseBackgroundColor = Color(0xffFD3C4A);
-const kIncomeBackgroundColor = Color(0xff00A86B);
+const kRedBackgroundColor = Color(0xffFD3C4A);
+const kGreenBackgroundColor = Color(0xff00A86B);
 const kTransactionBackgroundColor = Color(0xff0077FF);
 
 void fieldFocusChange(BuildContext context , FocusNode current , FocusNode nextFocus){
@@ -29,7 +27,7 @@ void flushBarMessenger(String message , BuildContext context , {bool showError =
         padding:  EdgeInsets.all(16.0.r),
         margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
         message: message,
-        backgroundColor: showError ? kExpenseBackgroundColor : kIncomeBackgroundColor,
+        backgroundColor: showError ? kRedBackgroundColor : kGreenBackgroundColor,
         icon: const Icon(Icons.error_outline , color: kBackgroundThemeColor,),
         borderRadius: BorderRadius.circular(13.r),
         duration: const Duration(seconds: 5),
@@ -52,3 +50,29 @@ void showToast(String message , Color color){
     fontSize: 16.0.sp,
   );
 }
+
+String capitalize(String text) {
+  if (text.isEmpty) return text;
+  return text[0].toUpperCase() + text.substring(1);
+}
+
+
+final ThemeData lightTheme = ThemeData(
+  brightness: Brightness.light,
+  primaryColor: Color(0xff3094E8),
+  scaffoldBackgroundColor: Colors.white,
+  appBarTheme: AppBarTheme(
+    backgroundColor: Color(0xff3094E8),
+    foregroundColor: Colors.white,
+  ),
+);
+
+final ThemeData darkTheme = ThemeData(
+  brightness: Brightness.dark,
+  primaryColor: Color(0xff3094E8),
+  scaffoldBackgroundColor: Colors.black,
+  appBarTheme: AppBarTheme(
+    backgroundColor: Colors.black,
+    foregroundColor: Color(0xff3094E8),
+  ),
+);
