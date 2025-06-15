@@ -20,6 +20,7 @@ class AppBarText extends StatelessWidget {
           fontWeight: FontWeight.w600,
           fontFamily: 'Esteban',
           color: color
-      ),);
+      ),
+    );
   }
 }

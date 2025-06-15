@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:virtual_zen/utils/constant.dart';
 import 'package:virtual_zen/view/community_screen.dart';
@@ -20,12 +21,15 @@ class BottomBarScreen extends StatefulWidget {
   State<BottomBarScreen> createState() => _BottomBarScreenState();
 }
 
-class _BottomBarScreenState extends State<BottomBarScreen> {
+class _BottomBarScreenState extends State<BottomBarScreen> with WidgetsBindingObserver {
   bool _initialized = false;
+
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
     NotificationServices notificationServices = NotificationServices();
     notificationServices.requestNotificationPermission();
 
@@ -35,20 +39,41 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
         final pageViewModel = Provider.of<PageViewModel>(context, listen: false);
         final friendVM = Provider.of<FriendsViewModel>(context, listen: false);
 
-        profileViewModel.tryLoadProfileWithRetry(); // loads profile
+        profileViewModel.tryLoadProfileWithRetry();  /// loads profile
         Future.delayed(Duration.zero, () {
           final friendReqVM = Provider.of<FriendRequestViewModel>(context, listen: false);
           friendReqVM.listenForRequests();
         });
         friendVM.initialize();
-         pageViewModel.loadPhobia(); // loads phobia from shared prefs
+        pageViewModel.loadPhobia();  /// loads phobia from shared prefs
+        profileViewModel.setOnline();
         _initialized = true;
       }
     });
   }
 
+  @override
+  void dispose() {
+    final profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
+    WidgetsBinding.instance.removeObserver(this); // <-- Remove observer
+    profileViewModel.setOffline(); // Just in case
+    super.dispose();
+  }
+
+  // 🔄 Handle app lifecycle state changes
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
+    if (state == AppLifecycleState.resumed) {
+      profileViewModel.setOnline();
+    } else if (state == AppLifecycleState.paused || state == AppLifecycleState.detached) {
+      profileViewModel.setOffline();
+    }
+  }
 
   Widget getPhobiaScreen(String? phobia) {
+    final profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
+
     switch (phobia) {
       case "flying":
         return FlyingHomePage();
@@ -57,15 +82,24 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
       case "height":
         return HeightsHomePage();
       default:
-        return const Center(child: Text("No phobia selected"));
+        return  Center(
+            child: Text("No phobia selected \nGoto Profile > ⚙  > Select Phobia",
+              style: TextStyle(
+                  fontSize: 18.sp,
+                  fontFamily: 'Esteban',
+                  color: profileViewModel.isDarkMode ? Colors.white60 : Colors.black54
+              ),
+            ));
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
+
     return Consumer2<ProfileViewModel, PageViewModel>(
       builder: (context, profileVM, navigationProvider, _) {
-        // Show loading until both are ready
+        /// Show loading until both are ready
         if (profileVM.isLoadingProfile || navigationProvider.isLoading) {
           return const Scaffold(body: Center(child: CircularProgressIndicator()));
         }
@@ -78,7 +112,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
         ];
 
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: profileViewModel.isDarkMode ? Colors.black : Colors.white,
           body: PageView(
             controller: navigationProvider.pageController,
             onPageChanged: navigationProvider.setCurrentIndex,

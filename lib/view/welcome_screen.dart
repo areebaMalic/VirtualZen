@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import '../utils/components/filled_button_design.dart';
 import '../utils/routes/route_name.dart';
+import '../viewModel/profile_view_model.dart';
 
 class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
+
     return Scaffold(
       body: Column(
         children: [
@@ -26,7 +32,8 @@ class WelcomeScreen extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 34.sp,
                       fontWeight: FontWeight.bold,
-                      fontFamily: 'Esteban'
+                      fontFamily: 'Esteban',
+                      color: profileViewModel.isDarkMode ? Colors.white: Colors.black
                   ),
                   textAlign: TextAlign.center,
                 ),

@@ -4,8 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:googleapis_auth/auth_io.dart';
-import 'package:provider/provider.dart';
 import 'package:virtual_zen/viewModel/friends_view_model.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class ChatViewModel extends ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -455,6 +457,69 @@ class ChatViewModel extends ChangeNotifier {
     await _firestore.collection('users').doc(uid).collection('friends').doc(friendId).update({
       'unreadCount': 0,
     });
+  }
+
+  Future<String?> uploadToCloudinary(File imageFile) async {
+    const cloudName = 'dnp4ncgro'; // from Cloudinary dashboard
+    const uploadPreset = 'message image'; // from Cloudinary upload settings
+
+    final url = Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/upload');
+
+    final request = http.MultipartRequest('POST', url)
+      ..fields['upload_preset'] = uploadPreset
+      ..files.add(await http.MultipartFile.fromPath('file', imageFile.path));
+
+    final response = await request.send();
+
+    if (response.statusCode == 200) {
+      final resStr = await response.stream.bytesToString();
+      final data = json.decode(resStr);
+      return data['secure_url']; // Cloudinary-hosted image URL
+    } else {
+      print('Cloudinary upload failed: \${response.statusCode}');
+      return null;
+    }
+  }
+
+  Future<void> sendImage(String chatRoomId, XFile imageFile, {String? replyToId}) async {
+    try {
+      final cloudinaryUrl = await uploadToCloudinary(File(imageFile.path));
+      if (cloudinaryUrl == null) return;
+
+      String? replyText;
+      if (replyToId != null) {
+        final replySnapshot = await _firestore
+            .collection('chatRooms')
+            .doc(chatRoomId)
+            .collection('messages')
+            .doc(replyToId)
+            .get();
+        if (replySnapshot.exists) {
+          replyText = replySnapshot['text'] ?? '';
+        }
+      }
+
+      final message = {
+        'senderId': _auth.currentUser!.uid,
+        'imageUrl': cloudinaryUrl,
+        'timestamp': FieldValue.serverTimestamp(),
+        'replyTo': replyToId,
+        'replyText': replyText,
+        'reactions': [],
+      };
+
+      await _firestore
+          .collection('chatRooms')
+          .doc(chatRoomId)
+          .collection('messages')
+          .add(message);
+
+      _replyMessageId = null;
+      _replyText = null;
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Image send error: \$e');
+    }
   }
 
 }

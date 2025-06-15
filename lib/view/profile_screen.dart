@@ -9,6 +9,7 @@ import '../viewModel/friends_view_model.dart';
 import '../viewModel/page_view_model.dart';
 import '../viewModel/phobia_view_model.dart';
 import '../viewModel/profile_view_model.dart';
+import 'full_screen_image_view.dart';
 
 class ProfileScreen extends StatelessWidget {
    ProfileScreen({super.key});
@@ -21,19 +22,32 @@ class ProfileScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Edit Name'),
+          title: const Text('Edit Name',
+          style: TextStyle(
+            fontFamily: 'Esteban',
+          ),),
           content: TextField(
             controller: controller,
-            decoration: const InputDecoration(labelText: 'New name'),
+            decoration: const InputDecoration(labelText: 'New name',
+            labelStyle: TextStyle(
+              fontFamily: 'Esteban',
+            )),
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+            TextButton(onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel',
+                style: TextStyle(
+                  fontFamily: 'Esteban',
+                ),)),
             TextButton(
               onPressed: () async {
                 await profileVM.updateName(controller.text.trim());
                 Navigator.pop(context);
               },
-              child: const Text('Save'),
+              child: const Text('Save',
+              style: TextStyle(
+                fontFamily: 'Esteban',
+              ),),
             ),
           ],
         );
@@ -51,17 +65,26 @@ class ProfileScreen extends StatelessWidget {
         padding: EdgeInsets.all(16.w),
         children: [
           SizedBox(height: 35.h),
-          Text("Settings", style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
+          Text("Settings", style: TextStyle(
+              fontSize: 18.sp,
+              fontFamily: 'Esteban',
+              fontWeight: FontWeight.bold)),
           SizedBox(height: 10.h),
           SwitchListTile(
-            title: Text("Hide Online Status", style: TextStyle(fontSize: 14.sp)),
+            title: Text("Hide Online Status", style: TextStyle(
+              fontSize: 14.sp,
+              fontFamily: 'Esteban',
+            )),
             value: profileVM.currentUser?.hideOnlineStatus ?? false,
             onChanged: (value) async {
               await profileVM.setHideOnlineStatus(context, value);
             },
           ),
           SwitchListTile(
-            title: Text("Dark Theme", style: TextStyle(fontSize: 14.sp)),
+            title: Text("Dark Theme", style: TextStyle(
+              fontSize: 14.sp,
+              fontFamily: 'Esteban',
+            )),
             value: profileVM.isDarkMode,
             onChanged: (val) {
               profileVM.setDarkMode(val);
@@ -70,7 +93,10 @@ class ProfileScreen extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.edit, size: 22.sp),
-            title: Text("Edit Name", style: TextStyle(fontSize: 14.sp)),
+            title: Text("Edit Name", style: TextStyle(
+                fontSize: 14.sp,
+                fontFamily: 'Esteban'
+            )),
             onTap: () {
               Navigator.pop(context);
               _showEditNameDialog(context, profileVM);
@@ -81,11 +107,18 @@ class ProfileScreen extends StatelessWidget {
             value: phobiaVM.phobias.any((p) => p.routeName == pageVM.selectedPhobia)
                 ? pageVM.selectedPhobia
                 : null,
-            decoration: InputDecoration(labelText: "Select Phobia"),
+            decoration: InputDecoration(
+                labelText: "Select Phobia",
+                labelStyle: TextStyle(
+              fontFamily: 'Esteban',
+            )),
             items: phobiaVM.phobias.map((phobia) {
               return DropdownMenuItem(
                 value: phobia.routeName,
-                child: Text(phobia.name),
+                child: Text(phobia.name,
+                style: TextStyle(
+                  fontFamily: 'Esteban',
+                ),),
               );
             }).toList(),
             onChanged: (value) async {
@@ -96,7 +129,10 @@ class ProfileScreen extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.logout, size: 22.sp, color: Colors.red),
-            title: Text("Logout", style: TextStyle(fontSize: 14.sp, color: Colors.red)),
+            title: Text("Logout", style: TextStyle(
+                fontSize: 14.sp,
+                fontFamily: 'Esteban',
+                color: Colors.red)),
             onTap: () async {
               Navigator.pop(context);
               showDialog(
@@ -137,9 +173,13 @@ class ProfileScreen extends StatelessWidget {
       key: scaffoldKey,
       endDrawer: _buildSettingsDrawer(context, profileVM),
       appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: Colors.white
+        ),
         title: Text('Profile', style:
         TextStyle(
             fontSize: 18.sp,
+            fontFamily: 'Esteban',
             color: Colors.white
         )),
         actions: [
@@ -155,7 +195,10 @@ class ProfileScreen extends StatelessWidget {
       body: profileVM.isLoadingProfile
           ? const Center(child: CircularProgressIndicator())
           : user == null
-          ? const Center(child: Text('Error loading profile.'))
+          ? const Center(child: Text('Error loading profile.',
+      style: TextStyle(
+        fontFamily: 'Esteban',
+      ),))
           : Padding(
         padding: EdgeInsets.all(16.w),
         child: Column(
@@ -164,27 +207,77 @@ class ProfileScreen extends StatelessWidget {
             SizedBox(height: 16.h),
             GestureDetector(
               onTap: () async {
-                await profileVM.updateProfileImage(context);
+                if (user.imageUrl != null && user.imageUrl!.isNotEmpty && user.imageUrl!.startsWith('https://')) {
+                  showModalBottomSheet(
+                    context: context,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+                    ),
+                    builder: (context) {
+                      return Wrap(
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.image),
+                            title: const Text('View Profile Image',
+                              style: TextStyle(fontFamily: 'Esteban'),
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => FullscreenImageView(imageUrl: user.imageUrl!),
+                                ),
+                              );
+                            },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.edit),
+                            title: const Text('Change Profile Photo',
+                              style: TextStyle(fontFamily: 'Esteban'),
+                            ),
+                            onTap: () async {
+                              Navigator.pop(context);
+                              await profileVM.updateProfileImage(context);
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  // No profile image yet – just allow to update
+                  await profileVM.updateProfileImage(context);
+                }
               },
               child: CircleAvatar(
                 radius: 50.r,
-                backgroundImage: user.imageUrl != null && user.imageUrl!.isNotEmpty && user.imageUrl!.startsWith('https://')
+                backgroundImage: user.imageUrl != null &&
+                    user.imageUrl!.isNotEmpty &&
+                    user.imageUrl!.startsWith('https://')
                     ? NetworkImage(user.imageUrl!)
                     : null,
                 backgroundColor: Colors.grey.shade400,
                 child: user.imageUrl == null || user.imageUrl!.isEmpty
                     ? Text(
                   initials,
-                  style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold, color: Colors.white),
+                  style: TextStyle(
+                    fontSize: 28.sp,
+                    fontFamily: 'Esteban',
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 )
                     : null,
               ),
-
             ),
             SizedBox(height: 12.h),
             Text(
               user.name,
-              style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  fontSize: 20.sp,
+                  fontFamily: 'Esteban',
+                  fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 6.h),
             Row(
@@ -204,6 +297,7 @@ class ProfileScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
+                          fontFamily: 'Esteban',
                           color: profileVM.isDarkMode ? Colors.white54 : Colors.black54 ,
                         ),
                       ),
@@ -213,7 +307,10 @@ class ProfileScreen extends StatelessWidget {
                           final pin = user.pin ;
                           Clipboard.setData(ClipboardData(text: pin));
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("PIN copied to clipboard")),
+                            const SnackBar(content: Text("PIN copied to clipboard",
+                            style: TextStyle(
+                              fontFamily: 'Esteban',
+                            ),)),
                           );
                         },
                         child: Icon(Icons.copy, size: 18.sp, color: Colors.grey.shade700),
@@ -251,9 +348,10 @@ class ProfileScreen extends StatelessWidget {
                           Text(
                             "add friends",
                             style: TextStyle(
-                                color: profileVM.isDarkMode ? Colors.white54 : Colors.black54,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w500
+                              color: profileVM.isDarkMode ? Colors.white54 : Colors.black54,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
+                              fontFamily: 'Esteban',
                             ),
                           ),
                         ],
@@ -273,8 +371,10 @@ class ProfileScreen extends StatelessWidget {
                     return Center(
                       child: Text('No incoming requests',
                           style: TextStyle(
-                             color:  profileVM.isDarkMode ? Colors.white54 : Colors.black54,
-                              fontSize: 14.sp)
+                            color:  profileVM.isDarkMode ? Colors.white54 : Colors.black54,
+                            fontSize: 14.sp,
+                            fontFamily: 'Esteban',
+                          )
                       ),
                     );
                   }
@@ -287,8 +387,14 @@ class ProfileScreen extends StatelessWidget {
                         margin: EdgeInsets.only(bottom: 10.h),
                         child: ListTile(
                           tileColor: profileVM.isDarkMode ? Colors.black12 : Colors.white60,
-                          title: Text(req.name, style: TextStyle(fontSize: 14.sp)),
-                          subtitle: Text('PIN: ${req.pin}', style: TextStyle(fontSize: 12.sp)),
+                          title: Text(req.name, style: TextStyle(
+                            fontSize: 14.sp,
+                            fontFamily: 'Esteban',
+                          )),
+                          subtitle: Text('PIN: ${req.pin}', style: TextStyle(
+                            fontSize: 12.sp,
+                            fontFamily: 'Esteban',
+                          )),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -298,7 +404,10 @@ class ProfileScreen extends StatelessWidget {
                                   await vm.approveRequest(req);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text('${req.name} approved'),
+                                      content: Text('${req.name} approved',
+                                      style: TextStyle(
+                                        fontFamily: 'Esteban',
+                                      ),),
                                       duration: const Duration(seconds: 3),
                                     ),
                                   );
@@ -310,7 +419,10 @@ class ProfileScreen extends StatelessWidget {
                                   await vm.rejectRequest(req.id);
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text('${req.name} rejected'),
+                                      content: Text('${req.name} rejected',
+                                      style: TextStyle(
+                                        fontFamily: 'Esteban',
+                                      ),),
                                       duration: const Duration(seconds: 3),
                                     ),
                                   );

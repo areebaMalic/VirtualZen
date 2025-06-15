@@ -11,25 +11,15 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     _checkLoginStatus(context);
     return Scaffold(
-      backgroundColor: Color(0xffCECECE),
+      backgroundColor: Colors.white,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/logo/logo_foreground.png',
-              width: 150.w,
-              height: 150.h,
-            ),
-            SizedBox(height: 20.h),
-            Text(
-              'Conquer Your Fear',
-              style: TextStyle(
-                color: Colors.black54,
-                fontFamily: 'Esteban',
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              'assets/logo/logo.png',
+              width: 300.w,
+              height: 300.h,
             ),
             SizedBox(height: 20.h),
             CircularProgressIndicator(),

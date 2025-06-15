@@ -14,6 +14,50 @@
       },
       "oauth_client": [
         {
+          "client_id": "705365726490-2louhd2l0td6b8hfrfqlcnfh4462qc7j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.virtual_zen",
+            "certificate_hash": "ae3740701e462797a3d2f9781dff8342417d5dbb"
+          }
+        },
+        {
+          "client_id": "705365726490-gh1o78pojkgf7g4bdc185ihhbqcrckfc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ6GrQjvtuJYeQodKWZ1Ia7IXYiwZvnxs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "705365726490-gh1o78pojkgf7g4bdc185ihhbqcrckfc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "705365726490-b7k2c2l6pokbi53e8nuoitepdkqb8ouu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.virtualZen"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705365726490:android:2ca52d50968603f5fbc8a3",
+        "android_client_info": {
+          "package_name": "com.example.virtualzen"
+        }
+      },
+      "oauth_client": [
+        {
           "client_id": "705365726490-gh1o78pojkgf7g4bdc185ihhbqcrckfc.apps.googleusercontent.com",
           "client_type": 3
         }

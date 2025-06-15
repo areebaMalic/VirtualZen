@@ -192,7 +192,7 @@ class AuthViewModel with ChangeNotifier{
   }
 
 
-  Future<User?> signUpWithGoogle(String name) async {
+  Future<User?> signUpWithGoogle([String? name]) async {
     setLoading(true);
     try {
       GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();

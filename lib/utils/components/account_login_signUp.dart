@@ -39,7 +39,9 @@ class AccountLoginSignUp extends StatelessWidget {
                 fontSize: 15.sp,
                 fontFamily: 'Esteban',
                 color: kHighlightedTextColor,
-              ),))
+              ),
+            )
+        )
       ],
     );
   }

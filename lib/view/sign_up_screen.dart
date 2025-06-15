@@ -66,14 +66,14 @@ class SignUpScreen extends StatelessWidget {
                     },
                     focusNode: emailFocus,
                     controller: _emailController,
-                    title: 'Username',
+                    title: 'Email',
                     showIcon: false,
                   ),
                   SizedBox(height: 24.h,),
                   Consumer<PageViewModel>(
                     builder: (context, pageViewModel, child) {
                       return  TextFieldDesign(
-                        isobsecured: pageViewModel.isPasswordVisible,
+                        isObsecured: pageViewModel.isPasswordVisible,
                         onIconTap: () => pageViewModel.togglePasswordVisibility(),
                         focusFunction:   (focusNode){
                           fieldFocusChange(context, passwordFocus, FocusNode());
@@ -168,7 +168,7 @@ class SignUpScreen extends StatelessWidget {
                           User ? user = await authViewModel.signUpWithGoogle(name);
                           if (user != null) {
                             Navigator.pushNamed(context, RouteName.bottomBar);
-                            flushBarMessenger("Login Successfully ${authViewModel.errorMessage}", context , showError: false);
+                            flushBarMessenger("Login Successfully ", context , showError: false);
                           } else {
                             flushBarMessenger('Google Sign-In Failed', context);
                           }
@@ -212,3 +212,81 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 }
+
+/*
+
+
+// ✅ Modify Sign-Up Flow to Support Email Verification + Return from Gmail
+
+// 🔧 During sign up (after creating user):
+UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+await userCredential.user!.sendEmailVerification();
+
+// ✅ Navigate to a new VerifyEmailScreen
+Navigator.pushReplacement(
+context,
+MaterialPageRoute(builder: (_) => const VerifyEmailScreen()),
+);
+
+// ✅ Create VerifyEmailScreen
+
+class VerifyEmailScreen extends StatefulWidget {
+const VerifyEmailScreen({super.key});
+
+@override
+State<VerifyEmailScreen> createState() => _VerifyEmailScreenState();
+}
+
+class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
+bool isVerified = false;
+bool isLoading = false;
+late User user;
+
+@override
+void initState() {
+super.initState();
+user = FirebaseAuth.instance.currentUser!;
+checkVerification();
+}
+
+Future<void> checkVerification() async {
+await user.reload();
+setState(() => user = FirebaseAuth.instance.currentUser!);
+if (user.emailVerified) {
+setState(() => isVerified = true);
+Navigator.pushReplacementNamed(context, RouteName.phobiaListScreen);
+}
+}
+
+@override
+Widget build(BuildContext context) {
+return Scaffold(
+appBar: AppBar(title: const Text("Verify Email")),
+body: Padding(
+padding: const EdgeInsets.all(20),
+child: Column(
+mainAxisAlignment: MainAxisAlignment.center,
+children: [
+const Text(
+"We've sent a verification email to your Gmail.",
+style: TextStyle(fontSize: 16, fontFamily: 'Esteban'),
+textAlign: TextAlign.center,
+),
+const SizedBox(height: 20),
+ElevatedButton(
+onPressed: () async {
+setState(() => isLoading = true);
+await checkVerification();
+setState(() => isLoading = false);
+},
+child: isLoading
+? const CircularProgressIndicator(color: Colors.white)
+    : const Text("I have verified", style: TextStyle(fontFamily: 'Esteban')),
+)
+],
+),
+),
+);
+}
+}
+*/

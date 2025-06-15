@@ -28,7 +28,8 @@ class ForwardScreen extends StatelessWidget {
         ),
         title: Text('Forward to',
         style: TextStyle(
-            color: Colors.white
+          color: Colors.white,
+          fontFamily: 'Esteban',
         ),),
         actions: [
           IconButton(
@@ -39,7 +40,10 @@ class ForwardScreen extends StatelessWidget {
             onPressed: () async {
               if (forwardVM.selectedFriendIds.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Please select at least one friend')),
+                  const SnackBar(content: Text('Please select at least one friend',
+                  style: TextStyle(
+                    fontFamily: 'Esteban',
+                  ),)),
                 );
                 return;
               }
@@ -47,15 +51,22 @@ class ForwardScreen extends StatelessWidget {
               final confirm = await showDialog<bool>(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: const Text('Confirm Forward'),
+                  title: const Text('Confirm Forward',style:
+                    TextStyle(
+                      fontFamily: 'Esteban',
+                    ),),
                   content: Text(
                     'Are you sure you want to forward ${messages.length} message(s) to ${forwardVM.selectedFriendIds.length} friend(s)?',
+                    style: TextStyle(
+                      fontFamily: 'Esteban',
+                    ),
                   ),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context, false),
                       child:  Text('Cancel',
                         style: TextStyle(
+                            fontFamily: 'Esteban',
                             color: profileVM.isDarkMode ? Colors.white : Colors.black
                         ),),
                     ),
@@ -66,7 +77,8 @@ class ForwardScreen extends StatelessWidget {
                       onPressed: () => Navigator.pop(context, true),
                       child:  Text('Forward',
                       style: TextStyle(
-                            color:  Colors.white
+                        color:  Colors.white,
+                        fontFamily: 'Esteban',
                       ),),
                     ),
                   ],
@@ -95,7 +107,10 @@ class ForwardScreen extends StatelessWidget {
                 forwardVM.clearSelections();
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Messages forwarded')),
+                  const SnackBar(content: Text('Messages forwarded',
+                  style: TextStyle(
+                    fontFamily: 'Esteban',
+                  ),)),
                 );
               }
             },
@@ -116,8 +131,14 @@ class ForwardScreen extends StatelessWidget {
               )
                   : Text(friend.name[0].toUpperCase()),
             ),
-            title: Text(capitalize(friend.name)),
-            subtitle: Text(friend.isOnline ? 'Online' : 'Offline'),
+            title: Text(capitalize(friend.name),
+            style: TextStyle(
+              fontFamily: 'Esteban',
+            ),),
+            subtitle: Text(friend.isOnline ? 'Online' : 'Offline',
+            style: TextStyle(
+              fontFamily: 'Esteban',
+            ),),
             trailing: Checkbox(
               activeColor: kFilledButtonColor,
               side: const BorderSide(

@@ -7,6 +7,7 @@ class FriendModel {
   final bool isOnline;
   final DateTime? lastSeen;
   final String? lastMessage;
+  String? lastMessageType;
   final String? imageUrl;
   final DateTime? lastMessageTime;
   final int unreadCount;
@@ -19,6 +20,7 @@ class FriendModel {
     required this.isOnline,
     required this.lastSeen,
     this.lastMessage,
+    this.lastMessageType,
     this.imageUrl,
     this.lastMessageTime,
     this.unreadCount = 0,
@@ -33,6 +35,7 @@ class FriendModel {
       isOnline: isOnline,
       lastSeen: lastSeen,
       lastMessage: lastMessage,
+      lastMessageType: lastMessageType,
       imageUrl: imageUrl,
       lastMessageTime: lastMessageTime,
       isSelected: isSelected ?? this.isSelected,
@@ -47,6 +50,7 @@ class FriendModel {
       isOnline: data['isOnline'] ?? false,
       lastSeen: (data['lastSeen'] as Timestamp?)?.toDate(),
       lastMessage: data['lastMessage'],
+      lastMessageType: data['lastMessageType'],
       imageUrl: data['imageUrl'],
       lastMessageTime: (data['lastMessageTime'] as Timestamp?)?.toDate(),
     );

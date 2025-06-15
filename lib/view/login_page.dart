@@ -1,10 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:virtual_zen/viewModel/profile_view_model.dart';
-
 import '../utils/components/account_login_signUp.dart';
 import '../utils/components/app_bar_text.dart';
 import '../utils/components/filled_button_design.dart';
@@ -32,7 +31,8 @@ class LoginScreen extends StatelessWidget {
         backgroundColor: profileVM.isDarkMode ?  Colors.black : Colors.white,
         title: AppBarText(
           text: 'Login' ,
-          color: profileVM.isDarkMode ?  Colors.white : Colors.black ,),
+          color: profileVM.isDarkMode ?  Colors.white : Colors.black ,
+        ),
         centerTitle: true,
         toolbarHeight: 100.h,
       ),
@@ -50,14 +50,14 @@ class LoginScreen extends StatelessWidget {
                   },
                   focusNode: emailFocus,
                   controller: _emailController,
-                  title: 'Username',
+                  title: 'Email',
                   showIcon: false,
                 ),
                 SizedBox(height: 24.h),
                 Consumer<PageViewModel>(
                   builder: (context, pageViewModel, child) {
                     return TextFieldDesign(
-                      isobsecured: pageViewModel.isPasswordVisible,
+                      isObsecured: pageViewModel.isPasswordVisible,
                       onIconTap: () => pageViewModel.togglePasswordVisibility(),
                       focusFunction: (focusNode) {
                         fieldFocusChange(context, passwordFocus, FocusNode());
@@ -69,6 +69,52 @@ class LoginScreen extends StatelessWidget {
                     );
                   },
                 ),
+                SizedBox(height: 12.h,),
+                Center(
+                    child: Text('or with',
+                      style: TextStyle(
+                          color: kLightTextColor,
+                          fontSize: 14.sp,
+                          fontFamily: 'Esteban',
+                          fontWeight: FontWeight.w700),)),
+                SizedBox(height: 12.h,),
+                Consumer<AuthViewModel>(
+                  builder: (context, authViewModel, child) {
+                    return InkWell(
+                      onTap: () async {
+                        User ? user = await authViewModel.signUpWithGoogle();
+                        if (user != null) {
+                          Navigator.pushNamed(context, RouteName.bottomBar);
+                          flushBarMessenger("Login Successfully ", context , showError: false);
+                        } else {
+                          flushBarMessenger('Google Sign-In Failed', context);
+                        }
+                      },
+                      child: SizedBox(
+                        height: 56.h,
+                        width: 343.w,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/icons/flat-color-icons_google.svg',
+                              height: 32.h,
+                              width: 32.w,
+                            ),
+                            SizedBox(width: 10.w,),
+                            Text('Sign Up with Google',
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                fontFamily: 'Esteban',
+                                fontWeight: FontWeight.w600,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },),
+                //SizedBox(height: 19.h,),
                 SizedBox(height: 40.h),
                 Consumer<AuthViewModel>(
                   builder: (context, authViewModel, child) {
@@ -83,17 +129,7 @@ class LoginScreen extends StatelessWidget {
                           bool isVerified = await authViewModel.checkEmailVerification(context);
 
                           if (isVerified) {
-                            final doc = await FirebaseFirestore.instance
-                                .collection('users')
-                                .doc(user.uid)
-                                .get();
-
-                            final data = doc.data();
-                            if (data == null || data['selectedPhobia'] == null || data['selectedPhobia'] == '') {
-                              Navigator.pushReplacementNamed(context, RouteName.phobiaList);
-                            } else {
-                              Navigator.pushReplacementNamed(context, RouteName.bottomBar);
-                            }
+                            Navigator.pushReplacementNamed(context, RouteName.bottomBar);
                           } else {
                             flushBarMessenger('Please verify your email before logging in', context);
                           }

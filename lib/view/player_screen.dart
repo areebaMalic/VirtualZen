@@ -1,3 +1,5 @@
+//player screen
+
 // player_screen.dart
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
@@ -51,7 +53,14 @@ class _PlayerScreenState extends State<PlayerScreen> {
       builder: (context, player) => Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-          title: const Text('Now Playing'),
+          iconTheme: IconThemeData(
+              color: Colors.white
+          ),
+          title: const Text('Now Playing',
+            style: TextStyle(
+              fontFamily: 'Esteban',
+              color: Colors.white
+            ),),
           backgroundColor: Colors.black87,
         ),
         body: Center(child: player),

@@ -10,7 +10,6 @@ import '../service/notification_services.dart';
 class FriendRequestViewModel extends ChangeNotifier {
   final _auth = FirebaseAuth.instance;
   final _db = FirebaseFirestore.instance;
-  final _notificationService = NotificationServices();
 
   List<UserModel> requests = [];
   StreamSubscription? _requestListener;

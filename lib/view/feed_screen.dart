@@ -1,5 +1,9 @@
-// feed_screen.dart
+//feed screen
+
+
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:virtual_zen/view/player_screen.dart';
 
 class Feed extends StatelessWidget {
@@ -16,8 +20,13 @@ class Feed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Stress Relief Videos',style: TextStyle(
-        color: Colors.white
+      appBar: AppBar(
+          iconTheme: IconThemeData(
+              color: Colors.white
+          ),
+          title: const Text('Stress Relief Videos',style: TextStyle(
+        color: Colors.white,
+        fontFamily: 'Esteban',
       ),)),
       body: ListView.builder(
         itemCount: videoIDs.length,
@@ -34,7 +43,7 @@ class Feed extends StatelessWidget {
               );
             },
             child: Card(
-              margin: const EdgeInsets.all(8.0),
+              margin:  EdgeInsets.all(8.0.w),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -44,10 +53,14 @@ class Feed extends StatelessWidget {
                     width: double.infinity,
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
-                        height: 200,
+                        height: 200.h,
                         color: Colors.grey[300],
                         child: const Center(
-                          child: Text('Thumbnail not available', style: TextStyle(color: Colors.black54)),
+                          child: Text('Thumbnail not available', style:
+                          TextStyle(
+                            color: Colors.black54,
+                            fontFamily: 'Esteban',
+                          )),
                         ),
                       );
                     },

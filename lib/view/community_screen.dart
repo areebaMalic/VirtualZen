@@ -8,6 +8,7 @@ import '../utils/routes/route_name.dart';
 import '../viewModel/chat_view_model.dart';
 import '../viewModel/friends_view_model.dart';
 import '../viewModel/profile_view_model.dart';
+
 class CommunityScreen extends StatelessWidget {
   const CommunityScreen({super.key});
 
@@ -16,7 +17,8 @@ class CommunityScreen extends StatelessWidget {
     final friendsVm = Provider.of<FriendsViewModel>(context);
     final profileVM = Provider.of<ProfileViewModel>(context);
 
-    // Sort friends by the time the last message was sent (descending order)
+    /// Sort friends by the time the last message was sent (descending order)
+
     friendsVm.friends.sort((a, b) {
       if (a.lastMessageTime == null || b.lastMessageTime == null) {
         return 0; // No sorting if times are not available
@@ -26,7 +28,16 @@ class CommunityScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Friends (${friendsVm.friendCount})', style: TextStyle(fontSize: 18.sp, color: Colors.white)),
+        iconTheme: IconThemeData(
+          color: Colors.white
+        ),
+        title: Text( friendsVm.friendCount > 0
+            ? 'Friends (${friendsVm.friendCount})'
+            : 'Friends',
+            style: TextStyle(
+                fontSize: 18.sp,
+                fontFamily: 'Esteban',
+                color: Colors.white)),
       ),
       body: Column(
         children: [
@@ -36,6 +47,9 @@ class CommunityScreen extends StatelessWidget {
               onChanged: friendsVm.searchFriends,
               decoration: InputDecoration(
                 hintText: 'Search friends by name or PIN',
+                hintStyle: TextStyle(
+                  fontFamily: 'Esteban',
+                ),
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(14.r),
                     borderSide: const BorderSide(
@@ -59,7 +73,11 @@ class CommunityScreen extends StatelessWidget {
                 ? Center(
               child: Text(
                 'No friends added yet',
-                style: TextStyle(fontSize: 14.sp),
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontFamily: 'Esteban',
+                  color: profileVM.isDarkMode ? Colors.white54 : Colors.black54,
+                ),
               ),
             )
                 : ListView.builder(
@@ -102,22 +120,28 @@ class CommunityScreen extends StatelessWidget {
                           ? ClipOval(
                         child: Image.network(friend.imageUrl!, width: 40.w, height: 40.h, fit: BoxFit.cover),
                       )
-                          : Text(friend.name[0].toUpperCase()),
+                          : Text( friend.name[0].toUpperCase(),
+                        style: TextStyle(
+                        fontFamily: 'Esteban',
+                      ),),
                     ),
                     title: Text(
                       friend.name,
                       style: TextStyle(
                         fontSize: 15.sp,
+                        fontFamily: 'Esteban',
                         fontWeight: friend.unreadCount > 0 ? FontWeight.bold : FontWeight.normal,
                       ),
                     ),
-                    subtitle: friend.lastMessage != null && friend.lastMessage!.isNotEmpty
+                    subtitle: (friend.lastMessage != null && friend.lastMessage!.isNotEmpty) ||
+                        (friend.lastMessageType == 'image')
                         ? Padding(
                       padding: EdgeInsets.only(top: 2.h),
                       child: Text(
-                        friend.lastMessage!,
+                        friend.lastMessageType == 'image' ? 'Photo' : friend.lastMessage!,
                         style: TextStyle(
                           fontSize: 13.sp,
+                          fontFamily: 'Esteban',
                           color: Colors.grey[700],
                           fontWeight: friend.unreadCount > 0 ? FontWeight.bold : FontWeight.normal,
                         ),

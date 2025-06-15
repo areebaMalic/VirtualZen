@@ -35,7 +35,6 @@ void flushBarMessenger(String message , BuildContext context , {bool showError =
         forwardAnimationCurve: Curves.decelerate,
         reverseAnimationCurve: Curves.easeInOut,
         flushbarPosition: FlushbarPosition.TOP,
-
       )..show(context)
   );
 }
@@ -55,7 +54,6 @@ String capitalize(String text) {
   if (text.isEmpty) return text;
   return text[0].toUpperCase() + text.substring(1);
 }
-
 
 final ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,

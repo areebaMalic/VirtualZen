@@ -82,6 +82,8 @@ class FriendsViewModel extends ChangeNotifier {
                 isOnline: presenceData['isOnline'] ?? false,
                 lastSeen: (presenceData['lastSeen'] as Timestamp?)?.toDate(),
                 lastMessage: current.lastMessage,
+                lastMessageType: current.lastMessageType,
+                unreadCount: current.unreadCount,
               );
               _filteredFriends = List.from(_allFriends);
               notifyListeners();
@@ -109,7 +111,9 @@ class FriendsViewModel extends ChangeNotifier {
           final unreadCount = unreadMessages.length;
 
           // Get the last message and timestamp
-          final lastMsg = messages.isNotEmpty ? messages.first.data()['text'] : null;
+          final lastMsgData = messages.isNotEmpty ? messages.first.data() : null;
+          final lastMsgType = lastMsgData?['type'] ?? 'text';
+          final lastMsg = lastMsgType == 'image' ? 'Photo' : lastMsgData?['text'];
           final lastMsgTime = messages.isNotEmpty
               ? (messages.first.data()['timestamp'] as Timestamp?)?.toDate()
               : null;

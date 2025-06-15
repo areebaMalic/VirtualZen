@@ -30,7 +30,7 @@ class ProfileViewModel extends ChangeNotifier {
 
 
   Future<void> loadUserProfile() async {
-    isLoadingProfile = true; // 🔥 Start loading
+    isLoadingProfile = true;
     notifyListeners();
 
     final uid = _auth.currentUser?.uid;
@@ -50,15 +50,26 @@ class ProfileViewModel extends ChangeNotifier {
 
     currentUser = UserModel.fromMap(doc.data()!, uid);
 
+    // ✅ Automatically update name from Google if not set
+    final user = _auth.currentUser;
+    if ((currentUser?.name.isEmpty ?? true || currentUser?.name == 'null') && user?.providerData.first.providerId == 'google.com') {
+      final googleName = user?.displayName;
+      if (googleName != null && googleName.isNotEmpty) {
+        await docRef.update({'name': googleName});
+        currentUser = currentUser?.copyWith(name: googleName);
+      }
+    }
+
     if (!(currentUser?.hideOnlineStatus ?? false)) {
       await docRef.update({'isOnline': true});
     }
 
     hideOthersStatus = currentUser?.hideOnlineStatus ?? false;
     isDarkMode = currentUser?.isDarkMode ?? false;
-    isLoadingProfile = false; // 🔥 Finished loading
+    isLoadingProfile = false;
     notifyListeners();
   }
+
 
   Future<void> setOffline() async {
     final uid = _auth.currentUser?.uid;
@@ -66,6 +77,15 @@ class ProfileViewModel extends ChangeNotifier {
       await _db.collection('users').doc(uid).update({
         'isOnline': false,
         'lastSeen': FieldValue.serverTimestamp(),
+      });
+    }
+  }
+
+  Future<void> setOnline() async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid != null) {
+      await FirebaseFirestore.instance.collection('users').doc(uid).update({
+        'isOnline': true,
       });
     }
   }

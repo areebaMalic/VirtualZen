@@ -26,7 +26,11 @@ class AddFriendScreen extends StatelessWidget {
               Center(
                 child: Text(
                   'Add by #pin',
-                  style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 24.sp,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Esteban',
+                  ),
                 ),
               ),
               SizedBox(height: 8.h),
@@ -37,6 +41,7 @@ class AddFriendScreen extends StatelessWidget {
                       : addFriendVM.errorMessage,
                   style: TextStyle(
                     fontSize: 14.sp,
+                    fontFamily: 'Esteban',
                     color: addFriendVM.errorMessage.isEmpty
                         ? Colors.grey
                         : Colors.red,
@@ -56,17 +61,24 @@ class AddFriendScreen extends StatelessWidget {
                     Text('#', style: TextStyle(
                         fontSize: 20.sp,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'Esteban',
                         color: profileVM.isDarkMode ? Colors.white : Colors.black
                     )),
                     SizedBox(width: 10.w),
                     Expanded(
                       child: TextField(
                         controller: addFriendVM.getPinController,
-                        style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w500),
+                        style: TextStyle(
+                            fontSize: 18.sp,
+                            fontFamily: 'Esteban',
+                            fontWeight: FontWeight.w500),
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Enter PIN',
-                          hintStyle: TextStyle(color: Colors.grey),
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                            fontFamily: 'Esteban',
+                          ),
                         ),
                       ),
                     ),
@@ -77,8 +89,9 @@ class AddFriendScreen extends StatelessWidget {
               Center(
                 child: Text('Or send your pin to friends',
                   style: TextStyle(
-                      fontSize: 14.sp,
-                      color: Colors.grey
+                    fontSize: 14.sp,
+                    color: Colors.grey,
+                    fontFamily: 'Esteban',
                   ),
                 ),
               ),
@@ -99,6 +112,7 @@ class AddFriendScreen extends StatelessWidget {
                           "PIN: #${user?.pin}",
                           style: TextStyle(
                             fontSize: 14.sp,
+                            fontFamily: 'Esteban',
                             fontWeight: FontWeight.w500,
                             color:  profileVM.isDarkMode ? Colors.white : Colors.black87,
                           ),
@@ -109,7 +123,10 @@ class AddFriendScreen extends StatelessWidget {
                             final pin = user?.pin ?? '';
                             Clipboard.setData(ClipboardData(text: pin));
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("PIN copied to clipboard")),
+                              const SnackBar(content: Text("PIN copied to clipboard",
+                              style: TextStyle(
+                                fontFamily: 'Esteban',
+                              ),)),
                             );
                           },
                           child: Icon(Icons.copy, size: 18.sp, color: Colors.grey.shade700),
@@ -146,7 +163,7 @@ class AddFriendScreen extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: Container(
                       width: 60.w,
-                      height: 60.w,
+                      height: 60.h,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         gradient: LinearGradient(

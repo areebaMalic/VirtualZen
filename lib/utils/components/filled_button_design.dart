@@ -31,6 +31,8 @@ class FilledButtonDesign extends StatelessWidget {
               fontFamily: 'Esteban',
               fontWeight: FontWeight.w600,
               color: kBackgroundThemeColor
-          ),));
+          ),
+        )
+    );
   }
 }

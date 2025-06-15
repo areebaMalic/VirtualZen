@@ -6,6 +6,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import '../main.dart';
 import '../utils/routes/route_name.dart';
+
 class NotificationServices {
   static final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -59,7 +60,7 @@ class NotificationServices {
         }
       }
 
-      // Save token to Firestore
+      /// Save token to Firestore
       final uid = FirebaseAuth.instance.currentUser?.uid;
       if (uid != null) {
         final token = await FirebaseMessaging.instance.getToken();
@@ -93,7 +94,7 @@ class NotificationServices {
       _handleNavigationFromMessage(message);
     });
 
-    // When app is completely closed and opened by tapping notification
+    /// When app is completely closed and opened by tapping notification
     _checkInitialMessage();
   }
 
@@ -129,40 +130,40 @@ class NotificationServices {
       message.notification?.title ?? 'Notification',
       message.notification?.body ?? 'You have a new message.',
       notificationDetails,
-      payload: _generatePayload(message), // <-- Pass payload for tapping
+      payload: _generatePayload(message), /// <-- Pass payload for tapping
     );
   }
 
-  // Create a string payload from message data
+  /// Create a string payload from message data
   String _generatePayload(RemoteMessage message) {
     final type = message.data['type'] ?? '';
     final chatRoomId = message.data['chatRoomId'] ?? '';
     final friendId = message.data['friendId'] ?? '';
     final friendName = message.data['friendName'] ?? '';
 
-    // Check for any empty or null values and handle them
+    /// Check for any empty or null values and handle them
     if (chatRoomId.isEmpty || friendId.isEmpty || friendName.isEmpty) {
-      return '';  // Return an empty string or a safe value
+      return '';  /// Return an empty string or a safe value
     }
 
     return '$type|$chatRoomId|$friendId|$friendName';
   }
 
 
-  // When user taps on local notification
+  /// When user taps on local notification
   void _handleNotificationTap(NotificationResponse response) {
     if (response.payload != null) {
       _navigateFromPayload(response.payload!);
     }
   }
 
-  // When user taps on FCM notification (background or terminated state)
+  /// When user taps on FCM notification (background or terminated state)
   void _handleNavigationFromMessage(RemoteMessage message) {
     final payload = _generatePayload(message);
     _navigateFromPayload(payload);
   }
 
-  // Central navigation function
+  /// Central navigation function
   void _navigateFromPayload(String payload) {
     final parts = payload.split('|');
     final type = parts[0];
@@ -195,20 +196,5 @@ class NotificationServices {
         break;
     }
 
-   /* if (type == 'friend_request') {
-      navigatorKey.currentState?.pushNamed('/friendRequests');
-    } else if (type == 'friend_approved') {
-      navigatorKey.currentState?.pushNamed('/friends');
-    } else if (type == 'chat' && chatRoomId.isNotEmpty && friendId.isNotEmpty) {
-      // You can pass arguments if your ChatScreen accepts them
-      navigatorKey.currentState?.pushNamed(
-        '/chat',
-        arguments: {
-          'chatRoomId': chatRoomId.isNotEmpty ? chatRoomId : null,
-          'friendId': friendId.isNotEmpty ? friendId : null,
-          'friendName': friendName.isNotEmpty ? friendName : null,
-        },
-      );
-    }*/
   }
 }

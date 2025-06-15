@@ -2,6 +2,7 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,6 +11,7 @@ import '../viewModel/chat_view_model.dart';
 import '../viewModel/friends_view_model.dart';
 import '../viewModel/profile_view_model.dart';
 import 'forward_screen.dart';
+import 'full_screen_image_view.dart';
 
 class ChatScreen extends StatelessWidget {
   ChatScreen({super.key});
@@ -28,7 +30,7 @@ class ChatScreen extends StatelessWidget {
     final user = profileVM.currentUser;
 
 
-    void _showFriendDetailsSheet(BuildContext rootContext, ChatViewModel viewModel, ProfileViewModel profileVM) {
+    void showFriendDetailsSheet(BuildContext rootContext, ChatViewModel viewModel, ProfileViewModel profileVM) {
       final friendsVM = Provider.of<FriendsViewModel>(context, listen: false);
 
 
@@ -36,11 +38,11 @@ class ChatScreen extends StatelessWidget {
         context: rootContext,
         backgroundColor: profileVM.isDarkMode ? Colors.grey[900] : Colors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
         ),
         builder: (context) {
           return Padding(
-            padding: const EdgeInsets.all(16),
+            padding:  EdgeInsets.all(16.r),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,28 +50,31 @@ class ChatScreen extends StatelessWidget {
                 Text(
                   'Friend Details',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
+                    fontFamily: 'Esteban',
                     color: profileVM.isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: 12.h),
                 Text(
                   'Name: ${viewModel.friendName ?? 'Unknown'}',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
+                    fontFamily: 'Esteban',
                     color: profileVM.isDarkMode ? Colors.white70 : Colors.black87,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 Text(
                   'PIN: ${user?.pin}',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 16.sp,
+                    fontFamily: 'Esteban',
                     color: profileVM.isDarkMode ? Colors.white70 : Colors.black87,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 StreamBuilder<DocumentSnapshot>(
                   stream: viewModel.getFriendStatusStream(),
                   builder: (context, snapshot) {
@@ -100,13 +105,14 @@ class ChatScreen extends StatelessWidget {
                     return Text(
                       lastSeenText,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16.sp,
+                        fontFamily: 'Esteban',
                         color: profileVM.isDarkMode ? Colors.white70 : Colors.black87,
                       ),
                     );
                   },
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24.h),
                 Center(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -118,16 +124,30 @@ class ChatScreen extends StatelessWidget {
                       final confirm = await showDialog<bool>(
                         context: context,
                         builder: (BuildContext dialogContext) => AlertDialog(
-                          title: const Text('Unfriend'),
-                          content: const Text('Are you sure you want to unfriend this user?'),
+                          title: const Text('Unfriend',
+                          style: TextStyle(
+                            fontFamily: 'Esteban',
+                          ),),
+                          content: const Text('Are you sure you want to unfriend this user?',
+                            style: TextStyle(
+                              fontFamily: 'Esteban',
+                            ),
+                          ),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.of(dialogContext).pop(false),
-                              child: const Text('Cancel'),
+                              child: const Text('Cancel',
+                                style: TextStyle(
+                                  fontFamily: 'Esteban',
+                                ),
+                              ),
                             ),
                             TextButton(
                               onPressed: () => Navigator.of(dialogContext).pop(true),
-                              child: const Text('Unfriend'),
+                              child: const Text('Unfriend',
+                              style: TextStyle(
+                                fontFamily: 'Esteban',
+                              ),),
                             ),
                           ],
                         ),
@@ -140,23 +160,28 @@ class ChatScreen extends StatelessWidget {
                           Navigator.pop(rootContext); // ✅ This will go back to the Community screen
 
                           ScaffoldMessenger.of(rootContext).showSnackBar(
-                            const SnackBar(content: Text('User unfriended')),
+                            const SnackBar(content: Text('User unfriended',
+                            style: TextStyle(
+                              fontFamily: 'Esteban',
+                            ),)),
                           );
                         }
                       }
                     },
                     child: const Text('Unfriend', style: TextStyle(
-                        color: Colors.white
+                      color: Colors.white,
+                      fontFamily: 'Esteban',
                     ),),
                   ),
                 ),
-                const SizedBox(height: 16),
+                SizedBox(height: 16.h),
               ],
             ),
           );
         },
       );
     }
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -173,7 +198,8 @@ class ChatScreen extends StatelessWidget {
             ? Text(
           '${viewModel.selectedMessageIds.length} selected',
           style:  TextStyle(
-              fontSize: 18,
+            fontSize: 18.sp,
+            fontFamily: 'Esteban',
             color: profileVM.isDarkMode ? Colors.white: Colors.black,
           ),
         )
@@ -189,18 +215,22 @@ class ChatScreen extends StatelessWidget {
                   viewModel.friendImageUrl!.isEmpty
                   ? Text(
                 viewModel.friendName![0].toUpperCase(),
-                style: const TextStyle(fontSize: 18, color: Colors.black),
+                style:  TextStyle(
+                    fontSize: 18.sp,
+                    fontFamily: 'Esteban',
+                    color: Colors.black),
               )
                   : null,
             ),
-            const SizedBox(width: 8),
+            SizedBox(width: 8.w),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   viewModel.friendName![0].toUpperCase() + viewModel.friendName!.substring(1),
                   style:  TextStyle(
-                      fontSize: 18,
+                    fontSize: 18.sp,
+                    fontFamily: 'Esteban',
                     color: profileVM.isDarkMode ? Colors.white: Colors.black,
                   ),
                 ),
@@ -213,7 +243,11 @@ class ChatScreen extends StatelessWidget {
                     if (isOnline) {
                       return Text(
                         'Online',
-                        style: TextStyle(fontSize: 12, color: Colors.black54),
+                        style: TextStyle(
+                            fontSize: 12.sp,
+                            fontFamily: 'Esteban',
+                            color: profileVM.isDarkMode ? Colors.white60: Colors.black54,
+                        ),
                       );
                     } else if (lastSeen != null && lastSeen is Timestamp) {
                       final dateTime = lastSeen.toDate();
@@ -233,7 +267,8 @@ class ChatScreen extends StatelessWidget {
                             ? 'Last seen $time'
                             : 'Last seen $formattedDate at $time',
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 12.sp,
+                          fontFamily: 'Esteban',
                           color: profileVM.isDarkMode ? Colors.white60 : Colors.black54,
                         ),
                       );
@@ -244,7 +279,7 @@ class ChatScreen extends StatelessWidget {
                 )
               ],
             ),
-            const SizedBox(width: 130),
+            SizedBox(width: 120.w),
               PopupMenuButton(
                 icon: Icon(
                   Icons.more_vert,
@@ -252,14 +287,17 @@ class ChatScreen extends StatelessWidget {
                 ),
                 onSelected: (value) {
                   if (value == 'details') {
-                    _showFriendDetailsSheet(context, viewModel, profileVM);
+                    showFriendDetailsSheet(context, viewModel, profileVM);
                   }
                 },
                 itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    height: 30,
+                   PopupMenuItem(
+                    height: 30.h,
                     value: 'details',
-                    child: Text('Details'),
+                    child: Text('Details', style:
+                      TextStyle(
+                        fontFamily: 'Esteban',
+                      ),),
                   ),
                 ],
               ),
@@ -310,21 +348,35 @@ class ChatScreen extends StatelessWidget {
               final confirm = await showDialog<String>(
                 context: context,
                 builder: (context) => AlertDialog(
-                  title: const Text('Delete Messages'),
-                  content: const Text('Do you want to delete the selected message(s)?'),
+                  title: const Text('Delete Messages', style: TextStyle(
+                    fontFamily: 'Esteban',
+                  ),),
+                  content: const Text('Do you want to delete the selected message(s)?',
+                  style: TextStyle(
+                    fontFamily: 'Esteban',
+                  ),),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context, 'me'),
-                      child: const Text('Delete for Me'),
+                      child: const Text('Delete for Me',
+                      style: TextStyle(
+                        fontFamily: 'Esteban',
+                      ),),
                     ),
                     if (isCurrentUserSender.every((isSender) => isSender))
                       TextButton(
                         onPressed: () => Navigator.pop(context, 'everyone'),
-                        child: const Text('Delete for Everyone'),
+                        child: const Text('Delete for Everyone',
+                        style: TextStyle(
+                          fontFamily: 'Esteban',
+                        ),),
                       ),
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
+                      child: const Text('Cancel',
+                      style: TextStyle(
+                        fontFamily: 'Esteban',
+                      ),),
                     ),
                   ],
                 ),
@@ -333,16 +385,29 @@ class ChatScreen extends StatelessWidget {
                 final confirmDelete = await showDialog<bool>(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: const Text('Confirm Deletion'),
-                    content: const Text('Are you sure you want to delete for yourself?'),
+                    title: const Text('Confirm Deletion',
+                      style: TextStyle(
+                        fontFamily: 'Esteban',
+                      ),
+                    ),
+                    content: const Text('Are you sure you want to delete for yourself?',
+                      style: TextStyle(
+                        fontFamily: 'Esteban',
+                      ),),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(context, false),
-                        child: const Text('Cancel'),
+                        child: const Text('Cancel',
+                          style: TextStyle(
+                            fontFamily: 'Esteban',
+                          ),),
                       ),
                       TextButton(
                         onPressed: () => Navigator.pop(context, true),
-                        child: const Text('Yes, Delete'),
+                        child: const Text('Yes, Delete',
+                          style: TextStyle(
+                            fontFamily: 'Esteban',
+                          ),),
                       ),
                     ],
                   ),
@@ -354,16 +419,28 @@ class ChatScreen extends StatelessWidget {
                 final confirmDeleteEveryone = await showDialog<bool>(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: const Text('Confirm Deletion'),
-                    content: const Text('Delete message(s) for everyone? This cannot be undone.'),
+                    title: const Text('Confirm Deletion',
+                      style: TextStyle(
+                        fontFamily: 'Esteban',
+                      ),),
+                    content: const Text('Delete message(s) for everyone? This cannot be undone.',
+                      style: TextStyle(
+                        fontFamily: 'Esteban',
+                      ),),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(context, false),
-                        child: const Text('Cancel'),
+                        child: const Text('Cancel',
+                          style: TextStyle(
+                            fontFamily: 'Esteban',
+                          ),),
                       ),
                       TextButton(
                         onPressed: () => Navigator.pop(context, true),
-                        child: const Text('Yes, Delete for Everyone'),
+                        child: const Text('Yes, Delete for Everyone',
+                          style: TextStyle(
+                            fontFamily: 'Esteban',
+                          ),),
                       ),
                     ],
                   ),
@@ -371,7 +448,10 @@ class ChatScreen extends StatelessWidget {
                 if (confirmDeleteEveryone == true) {
                   await viewModel.deleteSelectedMessagesForEveryone(chatRoomId);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Message(s) deleted for everyone')),
+                    const SnackBar(content: Text('Message(s) deleted for everyone',
+                      style: TextStyle(
+                        fontFamily: 'Esteban',
+                      ),)),
                   );
                 }
               }
@@ -415,7 +495,7 @@ class ChatScreen extends StatelessWidget {
                   }
                 });
 
-                // Find the last sent message by current user that has been seen
+                /// Find the last sent message by current user that has been seen
                 final docs = snapshot.data!.docs;
 
                 final lastSeenMessageId = docs
@@ -436,7 +516,7 @@ class ChatScreen extends StatelessWidget {
                     final msg = messages[index];
                     final data = msg.data() as Map<String, dynamic>;
 
-                    // 🔹 Mark as seen if it's a friend's message and not seen
+                    /// 🔹 Mark as seen if it's a friend's message and not seen
                     Future.delayed(const Duration(milliseconds: 300), () {
                       final lastMessage = messages.last;
                       final data = lastMessage.data() as Map<String, dynamic>;
@@ -484,30 +564,30 @@ class ChatScreen extends StatelessWidget {
                                   backgroundColor: Colors.transparent,
                                   elevation: 0,
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
                                     decoration: BoxDecoration(
                                       color: Colors.white54,
-                                      borderRadius: BorderRadius.circular(30),
+                                      borderRadius: BorderRadius.circular(30.r),
                                     ),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        for (var emoji in ['👍', '❤️', '😂', '😮', '😢', '🙏', '🤞'])
+                                        for (var emoji in ['👍', '❤️', '😂', '😮', '😢', '🙏'])
                                           GestureDetector(
                                             onTap: () {
                                               Navigator.pop(context, emoji);
                                             },
                                             child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 6),
-                                              child: Text(emoji, style: const TextStyle(fontSize: 24)),
+                                              padding:  EdgeInsets.symmetric(horizontal: 6.w),
+                                              child: Text(emoji, style:  TextStyle(fontSize: 24.sp, fontFamily: 'Esteban',)),
                                             ),
                                           ),
                                         GestureDetector(
                                           onTap: () {
                                             Navigator.pop(context, 'custom_picker');
                                           },
-                                          child: const Padding(
-                                            padding: EdgeInsets.symmetric(horizontal: 6),
+                                          child:  Padding(
+                                            padding: EdgeInsets.symmetric(horizontal: 6.w),
                                             child: Icon(Icons.add_circle_outline, color: Colors.black54, size: 28),
                                           ),
                                         ),
@@ -520,7 +600,7 @@ class ChatScreen extends StatelessWidget {
                               if (emoji != null && emoji != 'custom_picker') {
                                 viewModel.toggleReaction(chatRoomId, msg.id, emoji);
                               } else if (emoji == 'custom_picker') {
-                                // Open full emoji picker as bottom sheet
+                                /// Open full emoji picker as bottom sheet
                                 final selectedEmoji = await showModalBottomSheet<String>(
                                   context: context,
                                   backgroundColor: Colors.transparent,
@@ -532,16 +612,16 @@ class ChatScreen extends StatelessWidget {
                                       minChildSize: 0.3,
                                       builder: (context, scrollController) {
                                         return Container(
-                                          decoration: const BoxDecoration(
+                                          decoration:  BoxDecoration(
                                             color: Colors.white,
-                                            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                                            borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
                                           ),
                                           child: EmojiPicker(
                                             onEmojiSelected: (category, emoji) {
                                               Navigator.pop(context, emoji.emoji);
                                             },
                                             config: Config(
-                                              height: 256,
+                                              height: 256.h,
                                               emojiViewConfig: EmojiViewConfig(
                                                 emojiSizeMax: 28 *
                                                     (foundation.defaultTargetPlatform == TargetPlatform.iOS ? 1.20 : 1.0),
@@ -575,8 +655,8 @@ class ChatScreen extends StatelessWidget {
                             }
                           },
                           child: Container(
-                            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                            padding: const EdgeInsets.all(12),
+                            margin:  EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                            padding:  EdgeInsets.all(12.r),
                             decoration: BoxDecoration(
                               color: viewModel.isHighlighted(msg.id)
                                   ? (isSender ? Colors.blue.shade200 : Colors.grey.shade300) // lighter color on highlight
@@ -586,7 +666,7 @@ class ChatScreen extends StatelessWidget {
                                   ? Colors.blue.shade100
                                   : Colors.grey.shade300,
                               border: null,
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(12.r),
                             ),
                             child: Column(
                               crossAxisAlignment: isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
@@ -608,12 +688,13 @@ class ChatScreen extends StatelessWidget {
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
                                                 const Icon(Icons.shortcut, size: 14, color: Colors.grey),
-                                                const SizedBox(width: 4),
+                                                 SizedBox(width: 4.w),
                                                 Text(
                                                   'Forwarded',
                                                   style: TextStyle(
-                                                    fontSize: 11,
+                                                    fontSize: 11.sp,
                                                     fontStyle: FontStyle.italic,
+                                                    fontFamily: 'Esteban',
                                                     color: Colors.grey[700],
                                                   ),
                                                 ),
@@ -643,16 +724,19 @@ class ChatScreen extends StatelessWidget {
                                                 }
                                               },
                                               child: Container(
-                                                margin: const EdgeInsets.only(top: 4),
-                                                padding: const EdgeInsets.all(8),
+                                                margin:  EdgeInsets.only(top: 4.h),
+                                                padding:  EdgeInsets.all(8.r),
                                                 decoration: BoxDecoration(
                                                   color: Colors.grey.shade300, // light background
-                                                  borderRadius: BorderRadius.circular(8),
+                                                  borderRadius: BorderRadius.circular(8.r),
                                                 ),
-                                                width: 100, // <-- full width
+                                                width: 100.w, // <-- full width
                                                 child: Text(
                                                   replyText,
-                                                  style: const TextStyle(fontSize: 14, color: Colors.black87),
+                                                  style:  TextStyle(
+                                                      fontSize: 14.sp,
+                                                      fontFamily: 'Esteban',
+                                                      color: Colors.black87),
                                                 ),
                                               ),
                                             ),
@@ -662,19 +746,52 @@ class ChatScreen extends StatelessWidget {
                                             crossAxisAlignment: CrossAxisAlignment.end,
                                             children: [
                                               Flexible(
-                                                child: Text(
-                                                  data['text'] ?? '',
-                                                  style: TextStyle(
-                                                    fontSize: 14,
-                                                    color:  Colors.black87
-                                                   ),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    if (data.containsKey('imageUrl') && data['imageUrl'] != null)
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                              builder: (_) => FullscreenImageView(imageUrl: data['imageUrl']),
+                                                            ),
+                                                          );
+                                                        },
+                                                        child: ClipRRect(
+                                                          borderRadius: BorderRadius.circular(8.r),
+                                                          child: Image.network(
+                                                            data['imageUrl'],
+                                                            width: 200.w,
+                                                            height: 200.h,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    if (data.containsKey('text') && (data['text']?.toString().trim().isNotEmpty ?? false))
+                                                      Padding(
+                                                        padding: EdgeInsets.only(top: 4.h),
+                                                        child: Text(
+                                                          data['text'],
+                                                          style: TextStyle(
+                                                            fontSize: 14.sp,
+                                                            fontFamily: 'Esteban',
+                                                            color: Colors.black87,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                  ],
                                                 ),
                                               ),
-                                              const SizedBox(width: 50),
+                                              SizedBox(width: 50.w),
                                               if (data['timestamp'] != null)
                                                 Text(
                                                   TimeOfDay.fromDateTime((data['timestamp'] as Timestamp).toDate()).format(context),
-                                                  style: const TextStyle(fontSize: 10, color: Colors.grey),
+                                                  style:  TextStyle(
+                                                      fontSize: 10.sp,
+                                                      fontFamily: 'Esteban',
+                                                      color: Colors.grey),
                                                 ),
                                             ],
                                           ),
@@ -688,10 +805,10 @@ class ChatScreen extends StatelessWidget {
                                         left: isSender ? null : 0,
                                         right: isSender ? 0 : null,
                                         child: Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                          padding:  EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
                                           decoration: BoxDecoration(
                                             color: Colors.white,
-                                            borderRadius: BorderRadius.circular(20),
+                                            borderRadius: BorderRadius.circular(20.r),
                                             boxShadow: [
                                               BoxShadow(
                                                 color: Colors.black.withOpacity(0.1),
@@ -708,14 +825,17 @@ class ChatScreen extends StatelessWidget {
                                                 onTap: () {
                                                   viewModel.toggleReaction(chatRoomId, msg.id, emoji);
                                                 },
-                                                child: Text(emoji, style: const TextStyle(fontSize: 16)),
+                                                child: Text(emoji, style:  TextStyle(
+                                                    fontSize: 16.sp,
+                                                  fontFamily: 'Esteban',
+                                                )),
                                               );
                                             }).toList(),
                                           ),
                                         ),
                                       ),
 
-                                    // "Seen" label outside the message bubble
+                                    /// "Seen" label outside the message bubble
                                     if (isSeenByFriend)
                                       Positioned(
                                         bottom: -25, // Positioning it outside and below the message bubble
@@ -724,7 +844,8 @@ class ChatScreen extends StatelessWidget {
                                         child: Text(
                                           'Seen',
                                           style: TextStyle(
-                                            fontSize: 10,
+                                            fontSize: 10.sp,
+                                            fontFamily: 'Esteban',
                                             color: Colors.grey[600],
                                             fontStyle: FontStyle.italic,
                                           ),
@@ -747,11 +868,11 @@ class ChatScreen extends StatelessWidget {
 
           if (viewModel.replyMessageId != null && viewModel.replyText != null)
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-              margin: const EdgeInsets.all(6),
+              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 6.h),
+              margin:  EdgeInsets.all(6.r),
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
-                border: Border(left: BorderSide(width: 4, color: Colors.blue.shade300)),
+                border: Border(left: BorderSide(width: 4.w, color: Colors.blue.shade300)),
               ),
               child: Row(
                 children: [
@@ -759,6 +880,7 @@ class ChatScreen extends StatelessWidget {
                     child: Text(
                       viewModel.replyText!,
                       style: const TextStyle(
+                        fontFamily: 'Esteban',
                         color: Colors.black87,
                         fontStyle: FontStyle.italic,
                       ),
@@ -772,7 +894,7 @@ class ChatScreen extends StatelessWidget {
               ),
             ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0.r),
             child: Row(
               children: [
                 Expanded(
@@ -807,16 +929,34 @@ class ChatScreen extends StatelessWidget {
                           hintText: "Type a message",
                           hintStyle: TextStyle(
                               fontSize: 14.sp,
+                              fontFamily: 'Esteban',
                               color: profileVM.isDarkMode ? Colors.black : Colors.grey.shade400
                           ),
                           border: InputBorder.none,
                         ),
                         style: TextStyle(
                             fontSize: 14.sp,
+                            fontFamily: 'Esteban',
                             color: Colors.black ),
                       ),
                     ),
                   ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.photo),
+                  onPressed: () async {
+                    final picker = ImagePicker();
+                    final pickedFile = await picker.pickImage(
+                      source: ImageSource.gallery,
+                      imageQuality: 70, // compress quality
+                      maxWidth: 1080,
+                    );
+                    if (pickedFile != null) {
+                      await viewModel.sendImage(chatRoomId, pickedFile, replyToId: viewModel.replyMessageId);
+                      viewModel.scrollToBottom();
+                      viewModel.clearReply();
+                    }
+                  },
                 ),
                 IconButton(
                   icon: const Icon(Icons.send),

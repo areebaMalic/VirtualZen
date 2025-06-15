@@ -25,11 +25,9 @@ void main() async{
   await Firebase.initializeApp();
 
   NotificationServices notificationServices = NotificationServices();
-
   notificationServices.initializeLocalNotifications();
 
   notificationServices.firebaseInit();
-
   notificationServices.listenToTokenRefresh();
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -62,8 +60,6 @@ class MyApp extends StatelessWidget {
             statusBarColor: Colors.transparent
         )
     );
-
-
 
     return ScreenUtilInit(
       builder: (context, child) {

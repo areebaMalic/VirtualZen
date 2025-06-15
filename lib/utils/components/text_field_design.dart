@@ -10,7 +10,7 @@ class TextFieldDesign extends StatelessWidget {
   final FocusNode? focusNode;
   final Function(FocusNode) focusFunction;
   final bool showIcon;
-  final bool isobsecured;
+  final bool isObsecured;
   final VoidCallback? onIconTap;
 
   const TextFieldDesign({
@@ -20,9 +20,8 @@ class TextFieldDesign extends StatelessWidget {
     required this.controller,
     required this.focusNode,
     this.showIcon = false,
-    this.isobsecured =false,
+    this.isObsecured =false,
     this.onIconTap,
-    // required Null Function(dynamic value) onChanged,
   });
 
 
@@ -32,7 +31,7 @@ class TextFieldDesign extends StatelessWidget {
       onEditingComplete: ()=>focusFunction(focusNode!),
       focusNode: focusNode,
       controller: controller,
-      obscureText: isobsecured,
+      obscureText: isObsecured,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         labelText: title,
@@ -51,7 +50,7 @@ class TextFieldDesign extends StatelessWidget {
             )),
         suffixIcon: showIcon ? IconButton(
           icon: Icon(
-            isobsecured ? Icons.visibility: Icons.visibility_off ,
+            isObsecured ? Icons.visibility: Icons.visibility_off ,
           ),
           onPressed: onIconTap, // This triggers the toggle
         ) : null,
