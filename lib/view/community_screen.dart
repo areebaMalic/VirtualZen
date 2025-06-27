@@ -28,9 +28,6 @@ class CommunityScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.white
-        ),
         title: Text( friendsVm.friendCount > 0
             ? 'Friends (${friendsVm.friendCount})'
             : 'Friends',

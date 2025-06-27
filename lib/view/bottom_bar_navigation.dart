@@ -3,10 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:virtual_zen/utils/constant.dart';
 import 'package:virtual_zen/view/community_screen.dart';
-import 'package:virtual_zen/view/feed_screen.dart';
 import 'package:virtual_zen/view/flying_hscreen.dart';
 import 'package:virtual_zen/view/height_hscreen.dart';
 import 'package:virtual_zen/view/profile_screen.dart';
+import 'package:virtual_zen/view/relaxing_music_screen.dart';
 import 'package:virtual_zen/view/spider_Hscreen.dart';
 import 'package:virtual_zen/viewModel/page_view_model.dart';
 import 'package:virtual_zen/viewModel/profile_view_model.dart';
@@ -106,7 +106,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> with WidgetsBindingOb
 
         final List<Widget> pages = [
           getPhobiaScreen(navigationProvider.selectedPhobia),
-          Feed(),
+          VideoFilterScreen(),
           CommunityScreen(),
           ProfileScreen(),
         ];
@@ -123,8 +123,20 @@ class _BottomBarScreenState extends State<BottomBarScreen> with WidgetsBindingOb
             onTap: navigationProvider.setCurrentIndex,
             selectedItemColor: kFilledButtonColor,
             unselectedItemColor: Colors.grey,
+            selectedLabelStyle: TextStyle(
+              fontFamily: 'Esteban',
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue,
+            ),
+            unselectedLabelStyle: TextStyle(
+              fontFamily: 'Esteban',
+              fontSize: 12,
+              fontWeight: FontWeight.normal,
+              color: Colors.grey,
+            ),
             items: const [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: "Phobia"),
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: "Phobia", ),
               BottomNavigationBarItem(icon: Icon(Icons.music_note), label: "Meditation"),
               BottomNavigationBarItem(icon: Icon(Icons.people), label: "Community"),
               BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),

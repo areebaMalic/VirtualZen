@@ -37,6 +37,9 @@ dependencies:
   photo_view: ^0.15.0
   gallery_saver_plus: ^3.2.8
   permission_handler: ^12.0.0+1
+  video_player: ^2.10.0
+  chewie: ^1.11.3
+  youtube_explode_dart: ^2.4.2
 
 
 
@@ -67,6 +70,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/logo/
+    - assets/videos/
     - assets/firebase_service_account.json
 
   fonts:
