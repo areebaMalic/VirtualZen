@@ -10,6 +10,7 @@ import '../viewModel/page_view_model.dart';
 import '../viewModel/phobia_view_model.dart';
 import '../viewModel/profile_view_model.dart';
 import 'full_screen_image_view.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 class ProfileScreen extends StatelessWidget {
    ProfileScreen({super.key});
@@ -103,30 +104,6 @@ class ProfileScreen extends StatelessWidget {
             },
           ),
           SizedBox(height: 10.h),
-          DropdownButtonFormField<String>(
-            value: phobiaVM.phobias.any((p) => p.routeName == pageVM.selectedPhobia)
-                ? pageVM.selectedPhobia
-                : null,
-            decoration: InputDecoration(
-                labelText: "Select Phobia",
-                labelStyle: TextStyle(
-              fontFamily: 'Esteban',
-            )),
-            items: phobiaVM.phobias.map((phobia) {
-              return DropdownMenuItem(
-                value: phobia.routeName,
-                child: Text(phobia.name,
-                style: TextStyle(
-                  fontFamily: 'Esteban',
-                ),),
-              );
-            }).toList(),
-            onChanged: (value) async {
-              if (value != null) {
-                await pageVM.updatePhobia(value);
-              }
-            },
-          ),
           ListTile(
             leading: Icon(Icons.logout, size: 22.sp, color: Colors.red),
             title: Text("Logout", style: TextStyle(
@@ -157,6 +134,58 @@ class ProfileScreen extends StatelessWidget {
               }
             },
           ),
+          SizedBox(height: 10.h),
+          DropdownButtonFormField2<String>(
+            value: phobiaVM.phobias.any((p) => p.routeName == pageVM.selectedPhobia)
+                ? pageVM.selectedPhobia
+                : null,
+            isExpanded: true,
+            decoration: InputDecoration(
+              labelText: "Select Phobia",
+              labelStyle: const TextStyle(
+                fontFamily: 'Esteban',
+                fontSize: 18,
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            ),
+            style: const TextStyle(fontFamily: 'Esteban', fontSize: 16),
+            dropdownStyleData: DropdownStyleData(
+              maxHeight: 250,
+              offset: const Offset(0, 9), // 👈 offsets dropdown from the field
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.white70,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    offset: Offset(0, 4),
+                  ),
+                ],
+              ),
+            ),
+            iconStyleData: const IconStyleData(
+              icon: Icon(Icons.arrow_drop_down, color: Colors.deepPurple),
+            ),
+            items: phobiaVM.phobias.map((phobia) {
+              return DropdownMenuItem<String>(
+                value: phobia.routeName,
+                child: Text(
+                  phobia.name,
+                  style: const TextStyle(fontFamily: 'Esteban', color: Colors.black54),
+                ),
+              );
+            }).toList(),
+            onChanged: (value) async {
+              if (value != null) {
+                await pageVM.updatePhobia(value);
+              }
+            },
+          ),
+
 
         ],
       ),
@@ -178,7 +207,7 @@ class ProfileScreen extends StatelessWidget {
         ),
         title: Text('Profile', style:
         TextStyle(
-            fontSize: 18.sp,
+            fontSize: 25.sp,
             fontFamily: 'Esteban',
             color: Colors.white
         )),
@@ -195,9 +224,10 @@ class ProfileScreen extends StatelessWidget {
       body: profileVM.isLoadingProfile
           ? const Center(child: CircularProgressIndicator())
           : user == null
-          ? const Center(child: Text('Error loading profile.',
+          ?  Center(child: Text('Error loading profile.',
       style: TextStyle(
         fontFamily: 'Esteban',
+        fontSize: 20.sp,
       ),))
           : Padding(
         padding: EdgeInsets.all(16.w),
@@ -218,8 +248,8 @@ class ProfileScreen extends StatelessWidget {
                         children: [
                           ListTile(
                             leading: const Icon(Icons.image),
-                            title: const Text('View Profile Image',
-                              style: TextStyle(fontFamily: 'Esteban'),
+                            title:  Text('View Profile Image',
+                              style: TextStyle(fontFamily: 'Esteban', fontSize: 25.sp),
                             ),
                             onTap: () {
                               Navigator.pop(context);
@@ -233,8 +263,8 @@ class ProfileScreen extends StatelessWidget {
                           ),
                           ListTile(
                             leading: const Icon(Icons.edit),
-                            title: const Text('Change Profile Photo',
-                              style: TextStyle(fontFamily: 'Esteban'),
+                            title:  Text('Change Profile Photo',
+                              style: TextStyle(fontFamily: 'Esteban' , fontSize: 25.sp),
                             ),
                             onTap: () async {
                               Navigator.pop(context);
@@ -275,7 +305,7 @@ class ProfileScreen extends StatelessWidget {
             Text(
               user.name,
               style: TextStyle(
-                  fontSize: 20.sp,
+                  fontSize: 30.sp,
                   fontFamily: 'Esteban',
                   fontWeight: FontWeight.bold),
             ),
@@ -295,7 +325,7 @@ class ProfileScreen extends StatelessWidget {
                       Text(
                         "PIN: #${user.pin}",
                         style: TextStyle(
-                          fontSize: 14.sp,
+                          fontSize: 17.sp,
                           fontWeight: FontWeight.w500,
                           fontFamily: 'Esteban',
                           color: profileVM.isDarkMode ? Colors.white54 : Colors.black54 ,
@@ -331,7 +361,6 @@ class ProfileScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey.shade400),
-                    // borderRadius: BorderRadius.circular(12.r),
                     borderRadius: BorderRadius.circular(20.r),
                   ),
                   child: Row(
@@ -349,7 +378,7 @@ class ProfileScreen extends StatelessWidget {
                             "add friends",
                             style: TextStyle(
                               color: profileVM.isDarkMode ? Colors.white54 : Colors.black54,
-                              fontSize: 14.sp,
+                              fontSize: 18.sp,
                               fontWeight: FontWeight.w500,
                               fontFamily: 'Esteban',
                             ),
@@ -372,7 +401,7 @@ class ProfileScreen extends StatelessWidget {
                       child: Text('No incoming requests',
                           style: TextStyle(
                             color:  profileVM.isDarkMode ? Colors.white54 : Colors.black54,
-                            fontSize: 14.sp,
+                            fontSize: 18.sp,
                             fontFamily: 'Esteban',
                           )
                       ),

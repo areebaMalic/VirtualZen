@@ -40,6 +40,13 @@ dependencies:
   video_player: ^2.10.0
   chewie: ^1.11.3
   youtube_explode_dart: ^2.4.2
+  dropdown_button2: ^2.3.9
+  lottie: ^3.3.1
+  fl_chart: ^1.0.0
+  shared_preferences: ^2.2.1
+
+
+
 
 
 
@@ -47,6 +54,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
   flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.4
@@ -71,6 +79,7 @@ flutter:
     - assets/icons/
     - assets/logo/
     - assets/videos/
+    - assets/animations/
     - assets/firebase_service_account.json
 
   fonts:

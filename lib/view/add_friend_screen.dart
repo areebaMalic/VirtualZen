@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:virtual_zen/utils/constant.dart';
 import '../viewModel/add_friend_view_model.dart';
 import '../viewModel/profile_view_model.dart';
 

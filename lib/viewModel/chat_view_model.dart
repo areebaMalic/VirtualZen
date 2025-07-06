@@ -506,6 +506,7 @@ class ChatViewModel extends ChangeNotifier {
         'replyTo': replyToId,
         'replyText': replyText,
         'reactions': [],
+        'messageType': 'image',
       };
 
       await _firestore
@@ -520,6 +521,9 @@ class ChatViewModel extends ChangeNotifier {
     } catch (e) {
       debugPrint('Image send error: \$e');
     }
+
+    await sendPushNotification(chatRoomId, '📷 Photo', _auth.currentUser!.uid);
+
   }
 
 }

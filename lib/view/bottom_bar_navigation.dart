@@ -23,7 +23,7 @@ class BottomBarScreen extends StatefulWidget {
 
 class _BottomBarScreenState extends State<BottomBarScreen> with WidgetsBindingObserver {
   bool _initialized = false;
-
+  late final ProfileViewModel _profileViewModel;
 
   @override
   void initState() {
@@ -35,39 +35,39 @@ class _BottomBarScreenState extends State<BottomBarScreen> with WidgetsBindingOb
 
     Future.microtask(() {
       if (!_initialized) {
-        final profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
+        _profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
         final pageViewModel = Provider.of<PageViewModel>(context, listen: false);
         final friendVM = Provider.of<FriendsViewModel>(context, listen: false);
 
-        profileViewModel.tryLoadProfileWithRetry();  /// loads profile
+        _profileViewModel.tryLoadProfileWithRetry();
         Future.delayed(Duration.zero, () {
           final friendReqVM = Provider.of<FriendRequestViewModel>(context, listen: false);
           friendReqVM.listenForRequests();
         });
         friendVM.initialize();
-        pageViewModel.loadPhobia();  /// loads phobia from shared prefs
-        profileViewModel.setOnline();
+        pageViewModel.loadPhobia();
+        _profileViewModel.setOnline();
+
         _initialized = true;
       }
     });
+
   }
 
   @override
   void dispose() {
-    final profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
-    WidgetsBinding.instance.removeObserver(this); // <-- Remove observer
-    profileViewModel.setOffline(); // Just in case
+    WidgetsBinding.instance.removeObserver(this);
+    _profileViewModel.setOffline(); // ✅ now safe
     super.dispose();
   }
 
   // 🔄 Handle app lifecycle state changes
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    final profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
     if (state == AppLifecycleState.resumed) {
-      profileViewModel.setOnline();
+      _profileViewModel.setOnline();
     } else if (state == AppLifecycleState.paused || state == AppLifecycleState.detached) {
-      profileViewModel.setOffline();
+      _profileViewModel.setOffline();
     }
   }
 
@@ -83,9 +83,9 @@ class _BottomBarScreenState extends State<BottomBarScreen> with WidgetsBindingOb
         return HeightsHomePage();
       default:
         return  Center(
-            child: Text("No phobia selected \nGoto Profile > ⚙  > Select Phobia",
+            child: Text("No phobia selected \n Goto Profile > ⚙  > Select Phobia",
               style: TextStyle(
-                  fontSize: 18.sp,
+                  fontSize: 20.sp,
                   fontFamily: 'Esteban',
                   color: profileViewModel.isDarkMode ? Colors.white60 : Colors.black54
               ),

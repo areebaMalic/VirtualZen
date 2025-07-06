@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:virtual_zen/utils/constant.dart';
+import '../utils/components/filled_button_design.dart';
 import '../viewModel/chat_view_model.dart';
 import '../viewModel/friends_view_model.dart';
 import '../viewModel/profile_view_model.dart';
@@ -78,12 +79,28 @@ class ChatScreen extends StatelessWidget {
                 StreamBuilder<DocumentSnapshot>(
                   stream: viewModel.getFriendStatusStream(),
                   builder: (context, snapshot) {
-                    final isOnline = snapshot.data?['isOnline'] ?? false;
-                    final lastSeen = snapshot.data?['lastSeen'];
-                    String lastSeenText = '';
+                    if (!snapshot.hasData || snapshot.data == null) {
+                      return const SizedBox.shrink();
+                    }
 
-                    if (isOnline) {
-                      lastSeenText = 'Online';
+                    final data = snapshot.data!.data() as Map<String, dynamic>?;
+
+                    if (data == null) {
+                      return const SizedBox.shrink();
+                    }
+
+                    final isOnline = data['isOnline'] ?? false;
+                    final lastSeen = data['lastSeen'];
+
+                    if (isOnline == true) {
+                      return Text(
+                        'Online',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontFamily: 'Esteban',
+                          color: profileVM.isDarkMode ? Colors.white60 : Colors.black54,
+                        ),
+                      );
                     } else if (lastSeen != null && lastSeen is Timestamp) {
                       final dateTime = lastSeen.toDate();
                       final now = DateTime.now();
@@ -97,82 +114,72 @@ class ChatScreen extends StatelessWidget {
                           '${dateTime.month.toString().padLeft(2, '0')}/'
                           '${dateTime.year}';
 
-                      lastSeenText = isToday
-                          ? 'Last seen $time'
-                          : 'Last seen $formattedDate at $time';
+                      return Text(
+                        isToday ? 'Last seen $time' : 'Last seen $formattedDate at $time',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontFamily: 'Esteban',
+                          color: profileVM.isDarkMode ? Colors.white60 : Colors.black54,
+                        ),
+                      );
+                    } else {
+                      return const SizedBox.shrink();
                     }
-
-                    return Text(
-                      lastSeenText,
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontFamily: 'Esteban',
-                        color: profileVM.isDarkMode ? Colors.white70 : Colors.black87,
-                      ),
-                    );
                   },
                 ),
                 SizedBox(height: 24.h),
-                Center(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: kFilledButtonColor,
-                      minimumSize: Size(double.infinity, 44),
-                    ),
-                    onPressed: () async {
-                      Navigator.pop(rootContext); // close the bottom sheet
-                      final confirm = await showDialog<bool>(
-                        context: context,
-                        builder: (BuildContext dialogContext) => AlertDialog(
-                          title: const Text('Unfriend',
+                FilledButtonDesign(
+                  title: 'Unfriend',
+                  press: () async {
+                    Navigator.pop(rootContext); // close the bottom sheet
+                    final confirm = await showDialog<bool>(
+                      context: context,
+                      builder: (BuildContext dialogContext) => AlertDialog(
+                        title:  Text('Unfriend',
+                          style: TextStyle(
+                              fontFamily: 'Esteban',
+                              fontSize: 30.sp
+                          ),),
+                        content: const Text('Are you sure you want to unfriend this user?',
                           style: TextStyle(
                             fontFamily: 'Esteban',
-                          ),),
-                          content: const Text('Are you sure you want to unfriend this user?',
-                            style: TextStyle(
-                              fontFamily: 'Esteban',
-                            ),
                           ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(dialogContext).pop(false),
-                              child: const Text('Cancel',
-                                style: TextStyle(
-                                  fontFamily: 'Esteban',
-                                ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(dialogContext).pop(false),
+                            child: const Text('Cancel',
+                              style: TextStyle(
+                                fontFamily: 'Esteban',
                               ),
                             ),
-                            TextButton(
-                              onPressed: () => Navigator.of(dialogContext).pop(true),
-                              child: const Text('Unfriend',
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.of(dialogContext).pop(true),
+                            child: const Text('Unfriend',
                               style: TextStyle(
                                 fontFamily: 'Esteban',
                               ),),
-                            ),
-                          ],
-                        ),
-                      );
+                          ),
+                        ],
+                      ),
+                    );
 
-                      if (confirm == true) {
-                        await viewModel.unfriend(currentUserId, friendID!, friendsVM);
+                    if (confirm == true) {
+                      await viewModel.unfriend(currentUserId, friendID!, friendsVM);
 
-                        if (rootContext.mounted) {
-                          Navigator.pop(rootContext); // ✅ This will go back to the Community screen
+                      if (rootContext.mounted) {
+                        Navigator.pop(rootContext); // ✅ This will go back to the Community screen
 
-                          ScaffoldMessenger.of(rootContext).showSnackBar(
-                            const SnackBar(content: Text('User unfriended',
+                        ScaffoldMessenger.of(rootContext).showSnackBar(
+                          const SnackBar(content: Text('User unfriended',
                             style: TextStyle(
                               fontFamily: 'Esteban',
                             ),)),
-                          );
-                        }
+                        );
                       }
-                    },
-                    child: const Text('Unfriend', style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Esteban',
-                    ),),
-                  ),
+                    }
+                  },
                 ),
                 SizedBox(height: 16.h),
               ],
@@ -237,16 +244,26 @@ class ChatScreen extends StatelessWidget {
                 StreamBuilder<DocumentSnapshot>(
                   stream: viewModel.getFriendStatusStream(),
                   builder: (context, snapshot) {
-                    final isOnline = snapshot.data?['isOnline'] ?? false;
-                    final lastSeen = snapshot.data?['lastSeen'];
+                    if (!snapshot.hasData || snapshot.data == null) {
+                      return const SizedBox.shrink();
+                    }
 
-                    if (isOnline) {
+                    final data = snapshot.data!.data() as Map<String, dynamic>?;
+
+                    if (data == null) {
+                      return const SizedBox.shrink();
+                    }
+
+                    final isOnline = data['isOnline'] ?? false;
+                    final lastSeen = data['lastSeen'];
+
+                    if (isOnline == true) {
                       return Text(
                         'Online',
                         style: TextStyle(
-                            fontSize: 12.sp,
-                            fontFamily: 'Esteban',
-                            color: profileVM.isDarkMode ? Colors.white60: Colors.black54,
+                          fontSize: 12.sp,
+                          fontFamily: 'Esteban',
+                          color: profileVM.isDarkMode ? Colors.white60 : Colors.black54,
                         ),
                       );
                     } else if (lastSeen != null && lastSeen is Timestamp) {
@@ -263,9 +280,7 @@ class ChatScreen extends StatelessWidget {
                           '${dateTime.year}';
 
                       return Text(
-                        isToday
-                            ? 'Last seen $time'
-                            : 'Last seen $formattedDate at $time',
+                        isToday ? 'Last seen $time' : 'Last seen $formattedDate at $time',
                         style: TextStyle(
                           fontSize: 12.sp,
                           fontFamily: 'Esteban',
@@ -277,31 +292,53 @@ class ChatScreen extends StatelessWidget {
                     }
                   },
                 )
+
               ],
             ),
-            SizedBox(width: 120.w),
-              PopupMenuButton(
-                icon: Icon(
-                  Icons.more_vert,
-                  color: profileVM.isDarkMode ? Colors.white : Colors.black,
+            Spacer(),
+            PopupMenuButton<String>(
+              offset: const Offset(0, 40), // dropdown below the button
+              color: profileVM.isDarkMode ? Colors.grey[900] : Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(
+                  color: Colors.grey.shade300,
                 ),
-                onSelected: (value) {
-                  if (value == 'details') {
-                    showFriendDetailsSheet(context, viewModel, profileVM);
-                  }
-                },
-                itemBuilder: (context) => [
-                   PopupMenuItem(
-                    height: 30.h,
-                    value: 'details',
-                    child: Text('Details', style:
-                      TextStyle(
-                        fontFamily: 'Esteban',
-                      ),),
-                  ),
-                ],
               ),
-            ],
+              elevation: 8,
+              icon: Icon(
+                Icons.more_vert,
+                size: 26,
+                color: profileVM.isDarkMode ? Colors.white : Colors.black,
+              ),
+              onSelected: (value) {
+                if (value == 'details') {
+                  showFriendDetailsSheet(context, viewModel, profileVM);
+                }
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem<String>(
+                  value: 'details',
+                  height: 40.h,
+                  child: Row(
+                    children: [
+                      Icon(Icons.info_outline, size: 25, color: Colors.deepPurple),
+                      SizedBox(width: 10.w),
+                      Text(
+                        'Details',
+                        style: TextStyle(
+                          fontFamily: 'Esteban',
+                          fontSize: 16.sp,
+                          color: profileVM.isDarkMode ? Colors.white : Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+
+          ],
         ),
         actions: viewModel.isSelectionMode
             ? [

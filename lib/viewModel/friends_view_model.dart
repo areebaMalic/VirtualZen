@@ -112,7 +112,7 @@ class FriendsViewModel extends ChangeNotifier {
 
           // Get the last message and timestamp
           final lastMsgData = messages.isNotEmpty ? messages.first.data() : null;
-          final lastMsgType = lastMsgData?['type'] ?? 'text';
+          final lastMsgType = lastMsgData?['messageType'] ?? 'text'; // ✅ fix field name
           final lastMsg = lastMsgType == 'image' ? 'Photo' : lastMsgData?['text'];
           final lastMsgTime = messages.isNotEmpty
               ? (messages.first.data()['timestamp'] as Timestamp?)?.toDate()
@@ -129,6 +129,7 @@ class FriendsViewModel extends ChangeNotifier {
               isOnline: current.isOnline,
               lastSeen: current.lastSeen,
               lastMessage: lastMsg,
+              lastMessageType: lastMsgType,
               lastMessageTime: lastMsgTime,
               unreadCount: unreadCount, // Set the correct unread count here
             );

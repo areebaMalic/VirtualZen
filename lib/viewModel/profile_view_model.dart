@@ -52,7 +52,7 @@ class ProfileViewModel extends ChangeNotifier {
 
     // ✅ Automatically update name from Google if not set
     final user = _auth.currentUser;
-    if ((currentUser?.name.isEmpty ?? true || currentUser?.name == 'null') && user?.providerData.first.providerId == 'google.com') {
+    if ((currentUser?.name.isEmpty ?? true) && user?.providerData.first.providerId == 'google.com') {
       final googleName = user?.displayName;
       if (googleName != null && googleName.isNotEmpty) {
         await docRef.update({'name': googleName});
